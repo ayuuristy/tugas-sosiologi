@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peta Masalah Sosial – Media Interaktif Sosiologi XI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F6F5;--card:#fff;--ink:#14323A;--mut:#53696F;--line:#CBDAD8;--teal:#17766F;--teal2:#DDEFEC;--gold:#F2B01E;--gold2:#FFF1CC;--coral:#D9482B;--coral2:#FCE3DD;--ok:#1E7F4F;--ok2:#DDF3E6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1E22;--card:#172C32;--ink:#E8F1F0;--mut:#9DB3B6;--line:#2B464D;--teal:#4FC3B8;--teal2:#1A3B3C;--gold:#F2B01E;--gold2:#3B3217;--coral:#FF8466;--coral2:#412620;--ok:#6CD29A;--ok2:#1B3A2A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1E22;--card:#172C32;--ink:#E8F1F0;--mut:#9DB3B6;--line:#2B464D;--teal:#4FC3B8;--teal2:#1A3B3C;--gold:#F2B01E;--gold2:#3B3217;--coral:#FF8466;--coral2:#412620;--ok:#6CD29A;--ok2:#1B3A2A;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",sans-serif;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(1.9rem,6vw,3rem);font-weight:800}h2{font-size:1.5rem}h3{font-size:1.1rem}
+p{margin:0 0 .8em;max-width:68ch}
+header{padding:28px 20px 18px;max-width:900px;margin:auto}
+header p{color:var(--mut)}
+.tag{display:inline-block;background:var(--gold2);color:var(--ink);border:2px solid var(--gold);border-radius:999px;padding:2px 12px;font-weight:700;font-size:.85rem;margin-bottom:10px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:2px solid var(--line)}
+nav div{max-width:900px;margin:auto;display:flex;gap:6px;padding:8px 20px;overflow-x:auto}
+nav button{flex:1;min-width:92px;font:700 1rem "Nunito Sans",sans-serif;padding:10px 12px;border:2px solid transparent;border-radius:10px;background:none;color:var(--mut);cursor:pointer}
+nav button[aria-selected=true]{background:var(--teal);color:#fff;border-color:var(--teal)}
+:root:not([data-theme="light"]) nav button[aria-selected=true]{color:#0F1E22}
+button:focus-visible,summary:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{max-width:900px;margin:auto;padding:20px}
+section{display:none}section.on{display:block}
+.box{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:700 1rem "Nunito Sans",sans-serif;padding:10px 16px;border-radius:10px;border:2px solid var(--teal);background:var(--card);color:var(--ink);cursor:pointer}
+.btn.p{background:var(--teal);color:#fff}
+:root:not([data-theme="light"]) .btn.p{color:#0F1E22}
+.btn:hover:not(:disabled){border-color:var(--gold)}.btn:disabled{opacity:.55;cursor:default}
+.btn.on{background:var(--teal2);border-color:var(--teal)}
+.fb{margin-top:12px;padding:10px 14px;border-radius:10px;font-weight:600}
+.fb.y{background:var(--ok2);border:2px solid var(--ok)}.fb.n{background:var(--coral2);border:2px solid var(--coral)}
+.mut{color:var(--mut)}
+details{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 16px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:700}
+.chain{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:640px){.chain{grid-template-columns:1fr}}
+.chain>div{border:2px dashed var(--line);border-radius:12px;padding:10px}
+.node{display:block;width:100%;text-align:left;margin:6px 0;font:600 .95rem "Nunito Sans",sans-serif;padding:8px 10px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.node.hid{color:transparent;text-shadow:0 0 8px var(--mut);user-select:none}
+.node.show{background:var(--teal2);border-color:var(--teal)}
+.arena{background:var(--ink);color:var(--bg);border-radius:16px;padding:20px;border:3px solid var(--gold)}
+:root:not([data-theme="light"]) .arena{background:#0A1518;color:#E8F1F0}
+.stat{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.bar{height:8px;background:rgba(255,255,255,.2);border-radius:9px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.card{background:var(--card);color:var(--ink);border-radius:12px;padding:18px;font-size:1.12rem;font-weight:600;margin-bottom:14px;min-height:84px;display:flex;align-items:center}
+.arena .btn{background:#fff;color:#14323A;border-color:#fff}.arena .btn:hover:not(:disabled){border-color:var(--gold);background:var(--gold2)}
+.arena .btn.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.arena .btn.no{background:var(--coral);color:#fff;border-color:var(--coral)}
+.arena .fb{color:var(--ink)}
+.opt{display:block;width:100%;text-align:left;margin-bottom:8px}
+.scale{display:flex;gap:6px;margin:6px 0 14px}.scale .btn{flex:1;padding:8px 0}
+label{font-weight:700;display:block;margin:10px 0 4px}
+textarea,input[type=text]{width:100%;font:inherit;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+textarea{min-height:84px;resize:vertical}
+.big{font:800 2.6rem "Bricolage Grotesque",sans-serif}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+<span class="tag">Sosiologi · Kelas XI · Semester Ganjil</span>
+<h1>Peta Masalah Sosial</h1>
+<p>Media interaktif untuk topik <b>Mengenal Ragam Permasalahan Sosial di Sekitar Kita</b>: pelajari konsepnya, mainkan game, uji diri lewat kuis, lalu tulis refleksimu.</p>
+</header>
+<nav role="tablist"><div>
+<button role="tab" aria-selected="true" data-t="belajar">Belajar</button>
+<button role="tab" aria-selected="false" data-t="game">Game</button>
+<button role="tab" aria-selected="false" data-t="kuis">Kuis</button>
+<button role="tab" aria-selected="false" data-t="refleksi">Refleksi</button>
+</div></nav>
+<main>
+
+<section id="belajar" class="on">
+<div class="box">
+<h2>1. Apakah ini masalah sosial?</h2>
+<p>Permasalahan sosial punya tiga ciri: <b>menyimpang dari nilai/norma</b>, <b>merugikan masyarakat</b>, dan <b>butuh pemecahan bersama</b>. Putuskan untuk tiap situasi.</p>
+<div id="ciri"></div>
+</div>
+<div class="box">
+<h2>2. Lima bidang permasalahan sosial</h2>
+<div class="row" id="bidang"></div>
+<div class="fb y" id="bidangInfo" style="display:none"></div>
+</div>
+<div class="box">
+<h2>3. Bagan sebab-akibat</h2>
+<p>Pilih kasus, lalu ketuk kotak untuk membuka isinya. Faktor di bawah masih berupa <b>dugaan</b> sampai dibuktikan lewat pengamatan dan wawancara.</p>
+<div class="row" id="kasusBtn"></div>
+<div class="chain" id="chain" style="margin-top:12px"></div>
+</div>
+<div class="box">
+<h2>4. Alur belajar 6 pertemuan</h2>
+<details><summary>Pertemuan 1: Orientasi konsep</summary><p>Pengertian dan ciri masalah sosial. Hasil: peta konsep dan tiket keluar.</p></details>
+<details><summary>Pertemuan 2: Ragam bentuk</summary><p>Klasifikasi kasus ke bidang ekonomi, pendidikan, kesehatan, lingkungan, sosial-budaya.</p></details>
+<details><summary>Pertemuan 3: Penyebab dan dampak</summary><p>Bagan sebab-akibat; membedakan fakta dan dugaan; menulis pertanyaan kritis.</p></details>
+<details><summary>Pertemuan 4: Merancang pengamatan</summary><p>Fokus masalah, dugaan awal, lembar observasi, 3–5 pertanyaan wawancara.</p></details>
+<details><summary>Pertemuan 5: Observasi dan analisis data</summary><p>Mencatat temuan, membandingkan dengan dugaan, menyusun kesimpulan sementara.</p></details>
+<details><summary>Pertemuan 6: Presentasi, refleksi, asesmen</summary><p>Presentasi laporan, tes individu, dan refleksi akhir.</p></details>
+</div>
+<div class="box">
+<h2>5. Cek etika pengamatan</h2>
+<div id="etika"></div>
+<div class="fb y" id="etikaFb">Centang semua sebelum turun ke lapangan.</div>
+</div>
+</section>
+
+<section id="game">
+<p>Dua game, masing-masing 10 sampai 12 kartu. Benar +10 poin; tiga benar beruntun memberi bonus +5.</p>
+<div class="box"><h2>Game 1: Sortir Kasus</h2><p class="mut">Masukkan tiap kasus ke bidang yang paling tepat.</p><div id="g1"></div></div>
+<div class="box"><h2>Game 2: Fakta, Dugaan, atau Opini?</h2><p class="mut">Latihan memisahkan data dari prasangka sebelum observasi.</p><div id="g2"></div></div>
+</section>
+
+<section id="kuis"><div class="box"><h2>Kuis: 10 soal pilihan ganda</h2><div id="quiz"></div></div></section>
+
+<section id="refleksi">
+<div class="box">
+<h2>Jurnal refleksi</h2>
+<p class="mut">Skala 1 (belum) sampai 4 (sangat paham/konsisten). Isianmu tersimpan di peramban ini saja.</p>
+<label for="nama">Nama</label><input type="text" id="nama" autocomplete="name">
+<div id="skala" style="margin-top:12px"></div>
+<label for="r1">Permasalahan sosial apa yang selama ini saya lewatkan begitu saja?</label><textarea id="r1"></textarea>
+<label for="r2">Hal apa yang masih membingungkan bagi saya?</label><textarea id="r2"></textarea>
+<label for="r3">Tindakan nyata apa yang akan saya lakukan sebagai warga?</label><textarea id="r3"></textarea>
+<div class="row" style="margin-top:14px"><button class="btn p" id="susun">Susun ringkasan</button><button class="btn" id="salin" disabled>Salin ringkasan</button></div>
+<label for="out" style="margin-top:14px">Ringkasan (bisa ditempel ke Google Classroom)</label><textarea id="out" readonly style="min-height:170px"></textarea>
+</div>
+</section>
+</main>
+
+<script>
+var $=function(s){return document.querySelector(s)},sh=function(a){return a.slice().sort(function(){return Math.random()-.5})};
+var best={g1:null,g2:null},quizScore=null,sk={};
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+/* tabs */
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){document.querySelectorAll("nav button").forEach(function(x){x.setAttribute("aria-selected",x==b)});document.querySelectorAll("section").forEach(function(s){s.classList.toggle("on",s.id==b.dataset.t)});window.scrollTo(0,0)}});
+/* 1 ciri */
+var cs=[["Tumpukan sampah menutup saluran air kampung dan memicu banjir.",1,"Merugikan banyak warga dan perlu diatasi bersama."],["Seorang murid lupa membawa pensil hari ini.",0,"Persoalan pribadi kecil; tidak merugikan masyarakat."],["Banyak remaja putus sekolah karena biaya sehingga sulit mendapat kerja.",1,"Berdampak luas dan butuh penanganan banyak pihak."],["Warga merayakan panen dengan syukuran bersama.",0,"Ini tradisi positif yang sesuai nilai dan norma."]];
+cs.forEach(function(c){var d=el("div","","<p><b>"+c[0]+"</b></p>"),r=el("div","row"),f=el("div","fb");f.style.display="none";
+[["Masalah sosial",1],["Bukan",0]].forEach(function(o){var b=el("button","btn",o[0]);b.onclick=function(){r.querySelectorAll("button").forEach(function(x){x.disabled=1});var ok=o[1]==c[1];f.className="fb "+(ok?"y":"n");f.textContent=(ok?"Tepat. ":"Belum tepat. ")+c[2];f.style.display="block"};r.appendChild(b)});
+d.appendChild(r);d.appendChild(f);d.style.marginBottom="16px";$("#ciri").appendChild(d)});
+/* 2 bidang */
+var bd={Ekonomi:"Pengangguran, kemiskinan, harga kebutuhan pokok yang sulit dijangkau.",Pendidikan:"Putus sekolah, sekolah rusak, kemampuan baca-tulis rendah.",Kesehatan:"Stunting, wabah penyakit, sanitasi dan air bersih yang buruk.",Lingkungan:"Sampah menumpuk, pencemaran sungai, hutan gundul.","Sosial-budaya":"Tawuran, perundungan, melemahnya sikap saling menghargai."};
+Object.keys(bd).forEach(function(k){var b=el("button","btn",k);b.onclick=function(){document.querySelectorAll("#bidang .btn").forEach(function(x){x.classList.remove("on")});b.classList.add("on");var i=$("#bidangInfo");i.style.display="block";i.textContent=k+": "+bd[k]};$("#bidang").appendChild(b)});
+/* 3 chain */
+var ks={"Sampah menumpuk":[["Kebiasaan membuang sampah sembarangan","Tempat sampah kurang","Pengangkutan tidak rutin"],["Sampah menumpuk di sekitar sekolah dan rumah"],["Jangka pendek: bau, banjir, penyakit","Jangka panjang: lingkungan rusak"]],"Putus sekolah":[["Biaya sekolah dan transport","Jarak sekolah jauh","Dorongan untuk bekerja"],["Anak putus sekolah"],["Jangka pendek: kehilangan kesempatan belajar","Jangka panjang: sulit kerja layak, kemiskinan berlanjut"]]};
+var hd=["Faktor penyebab (dugaan)","Masalah","Dampak"];
+function draw(k){var c=$("#chain");c.innerHTML="";ks[k].forEach(function(col,i){var d=el("div","","<h3>"+hd[i]+"</h3>");col.forEach(function(t){var n=el("button","node hid",t);n.onclick=function(){n.classList.toggle("hid");n.classList.toggle("show")};d.appendChild(n)});c.appendChild(d)});document.querySelectorAll("#kasusBtn .btn").forEach(function(b){b.classList.toggle("on",b.textContent==k)})}
+Object.keys(ks).forEach(function(k){var b=el("button","btn",k);b.onclick=function(){draw(k)};$("#kasusBtn").appendChild(b)});draw("Sampah menumpuk");
+/* 5 etika */
+["Meminta izin sebelum mengamati atau mewawancarai","Bersikap sopan dan tidak memaksa narasumber","Menjaga privasi: tanpa nama lengkap atau alamat","Tidak menyebarkan foto/identitas tanpa izin","Mencatat apa adanya, tidak mengarang data"].forEach(function(t,i){var l=el("label","","<input type='checkbox'> "+t);l.style.fontWeight="600";l.querySelector("input").onchange=function(){var n=document.querySelectorAll("#etika input:checked").length;$("#etikaFb").textContent=n==5?"Siap! Etika terpenuhi, selamat mengamati.":n+" dari 5 terpenuhi."};$("#etika").appendChild(l)});
+/* game engine */
+function game(id,key,opts,items){var root=$(id);function start(){var q=sh(items),i=0,sc=0,st=0;
+function show(){root.innerHTML="";var a=el("div","arena");a.innerHTML="<div class='stat'><span>Kartu "+(i+1)+"/"+q.length+"</span><span>Poin: "+sc+"</span><span>Beruntun: "+st+"</span></div><div class='bar'><i style='width:"+(i/q.length*100)+"%'></i></div>";
+a.appendChild(el("div","card",q[i][0]));var o=el("div","row"),f=el("div","fb");f.style.display="none";
+opts.forEach(function(t){var b=el("button","btn",t);b.onclick=function(){o.querySelectorAll("button").forEach(function(x){x.disabled=1;if(x.textContent==q[i][1])x.classList.add("ok")});var ok=t==q[i][1];if(ok){st++;sc+=10+(st>=3?5:0)}else{st=0;b.classList.add("no")}f.className="fb "+(ok?"y":"n");f.textContent=(ok?"Benar! ":"Jawaban: "+q[i][1]+". ")+q[i][2];f.style.display="block";var nx=el("button","btn p",i+1<q.length?"Kartu berikutnya":"Lihat hasil");nx.style.marginTop="10px";nx.onclick=function(){i++;i<q.length?show():end()};a.appendChild(nx);nx.focus()};o.appendChild(b)});
+a.appendChild(o);a.appendChild(f);root.appendChild(a)}
+function end(){best[key]=Math.max(best[key]||0,sc);root.innerHTML="";var a=el("div","arena","<div class='stat'><span>Selesai!</span></div><div class='big'>"+sc+" poin</div><p>Skor terbaik: "+best[key]+". "+(sc>=q.length*10?"Hebat, pemetaan masalahmu sudah tajam.":"Coba lagi untuk menaikkan skor.")+"</p>");var b=el("button","btn",'Main lagi');b.onclick=start;a.appendChild(b);root.appendChild(a)}
+show()}start()}
+game("#g1","g1",["Ekonomi","Pendidikan","Kesehatan","Lingkungan","Sosial-budaya"],[
+["Pengangguran meningkat di desa setelah pabrik tutup.","Ekonomi","Soal lapangan kerja dan penghasilan."],
+["Sekolah di daerah terpencil kekurangan guru dan gedungnya rusak.","Pendidikan","Soal akses dan mutu layanan belajar."],
+["Kasus demam berdarah naik karena genangan air tidak dikelola.","Kesehatan","Dampak langsung pada kesehatan warga."],
+["Sungai tercemar limbah rumah tangga.","Lingkungan","Soal rusaknya lingkungan hidup."],
+["Tawuran antarkelompok remaja.","Sosial-budaya","Soal perilaku dan hubungan sosial."],
+["Harga beras naik, banyak keluarga sulit membeli kebutuhan pokok.","Ekonomi","Soal daya beli dan kemiskinan."],
+["Banyak balita mengalami stunting karena kurang gizi.","Kesehatan","Soal gizi dan kesehatan anak."],
+["Hutan gundul akibat pembukaan lahan sembarangan.","Lingkungan","Soal kerusakan alam."],
+["Murid kelas atas masih sulit membaca.","Pendidikan","Soal mutu pembelajaran."],
+["Perundungan terhadap teman yang berbeda suku.","Sosial-budaya","Soal sikap saling menghargai."]]);
+game("#g2","g2",["Fakta","Dugaan","Opini"],[
+["Hasil pengamatan: ada 12 tumpukan sampah di sepanjang jalan sekolah.","Fakta","Bisa dihitung dan dibuktikan."],
+["Mungkin sampah menumpuk karena warga malas.","Dugaan","Kata “mungkin” menandakan belum ada bukti; ini prasangka."],
+["Menurut saya, warga di sini tidak peduli lingkungan.","Opini","Penilaian pribadi, bukan data."],
+["Wawancara: 3 dari 5 warga menyebut truk sampah datang seminggu sekali.","Fakta","Berasal dari data wawancara."],
+["Sepertinya banjir terjadi karena saluran air tersumbat.","Dugaan","Perlu dicek langsung ke saluran air."],
+["Sungguh menjengkelkan melihat sampah di mana-mana!","Opini","Mengungkap perasaan."],
+["Data sekolah: 8 murid tidak masuk sebulan karena sakit.","Fakta","Tercatat dan bisa diverifikasi."],
+["Barangkali anak putus sekolah karena orang tuanya tidak peduli pendidikan.","Dugaan","Belum terbukti dan berpotensi menjadi prasangka."]]);
+/* quiz */
+var Q=[
+["Pengertian","Pernyataan yang paling tepat tentang permasalahan sosial adalah ...",["Kesulitan pribadi yang hanya dialami satu orang","Kondisi yang menyimpang dari nilai/norma, merugikan masyarakat, dan perlu diatasi bersama","Perbedaan pendapat antara dua tetangga","Peristiwa alam tanpa campur tangan manusia"],1,"Tiga ciri: menyimpang dari nilai/norma, merugikan masyarakat, butuh pemecahan bersama."],
+["Pengertian","Yang BUKAN ciri permasalahan sosial adalah ...",["Merugikan banyak orang","Membutuhkan pemecahan bersama","Hanya berdampak pada satu orang dan tidak perlu penanganan bersama","Menyimpang dari nilai dan norma"],2,"Masalah sosial berdampak pada masyarakat, bukan sekadar urusan satu orang."],
+["Ragam","Stunting pada balita termasuk permasalahan sosial bidang ...",["Ekonomi","Pendidikan","Kesehatan","Sosial-budaya"],2,"Stunting berkaitan dengan gizi dan kesehatan anak."],
+["Ragam","Pengangguran dan kemiskinan yang meluas termasuk bidang ...",["Ekonomi","Lingkungan","Kesehatan","Pendidikan"],0,"Keduanya berkaitan dengan pekerjaan dan penghasilan."],
+["Sebab-akibat","Dalam bagan sebab-akibat, “pengangkutan sampah tidak rutin” berada pada bagian ...",["Dampak jangka panjang","Faktor penyebab","Pihak terdampak","Kesimpulan"],1,"Itu kemungkinan penyebab yang perlu dibuktikan lewat pengamatan."],
+["Sebab-akibat","Dampak jangka panjang dari putus sekolah massal adalah ...",["Libur lebih panjang","Sulit mendapat pekerjaan layak dan kemiskinan berlanjut","Sekolah makin ramai","Harga barang turun"],1,"Pendidikan rendah membatasi peluang kerja dan pendapatan."],
+["Sebab-akibat","Contoh faktor struktur sosial yang memicu masalah sosial adalah ...",["Kebiasaan buruk satu murid","Akses layanan publik yang tidak merata","Selera makan seseorang","Cuaca hari ini"],1,"Struktur sosial menyangkut kebijakan dan ketimpangan akses."],
+["Fakta-dugaan","Pernyataan yang termasuk FAKTA adalah ...",["Warga di sini pasti malas","Mungkin banjir karena warga ceroboh","Hasil hitung: ada 12 tumpukan sampah di jalan sekolah","Sampah itu menjijikkan"],2,"Fakta dapat diamati, dihitung, dan dibuktikan."],
+["Fakta-dugaan","Kamu menduga “anak putus sekolah karena malas”. Sikap peneliti yang tepat adalah ...",["Langsung menyimpulkan benar","Menguji dugaan dengan observasi dan wawancara beretika","Menyebarkan dugaan ke teman","Mengabaikan data yang berbeda"],1,"Dugaan harus diuji dengan data, bukan diyakini begitu saja."],
+["Fakta-dugaan","Perbedaan utama opini dan fakta adalah ...",["Opini selalu salah","Opini berupa penilaian atau perasaan pribadi, fakta dapat dibuktikan","Fakta hanya dari berita","Tidak ada bedanya"],1,"Opini bergantung pada pandangan seseorang; fakta bisa diverifikasi."]];
+(function(){var r=$("#quiz"),i=0,sc=0,miss={};
+function show(){r.innerHTML="";var q=Q[i];r.appendChild(el("p","mut","Soal "+(i+1)+" dari 10 · "+q[0]));r.appendChild(el("h3","",q[1]));var f=el("div","fb");f.style.display="none";
+q[2].forEach(function(t,k){var b=el("button","btn opt",String.fromCharCode(65+k)+". "+t);b.onclick=function(){r.querySelectorAll(".opt").forEach(function(x,j){x.disabled=1;if(j==q[3])x.classList.add("on")});var ok=k==q[3];if(ok)sc++;else miss[q[0]]=(miss[q[0]]||0)+1;f.className="fb "+(ok?"y":"n");f.textContent=(ok?"Benar. ":"Belum tepat. ")+q[4];f.style.display="block";var n=el("button","btn p",i<9?"Soal berikutnya":"Lihat hasil");n.style.marginTop="10px";n.onclick=function(){i++;i<10?show():end()};r.appendChild(n);n.focus()};r.appendChild(b)});r.appendChild(f)}
+function end(){quizScore=sc;var w=Object.keys(miss);r.innerHTML="<div class='big'>"+sc*10+"</div><p><b>"+sc+" dari 10 benar.</b> "+(sc>=8?"Pemahamanmu sudah kuat. Siap menuju pengayaan: bandingkan dua kasus.":sc>=6?"Cukup baik. Ulangi bagian yang masih keliru.":"Perlu penguatan. Buka lagi menu Belajar, lalu coba kuis ulang.")+"</p>"+(w.length?"<p class='mut'>Perlu diulang: "+w.join(", ")+".</p>":"");var b=el("button","btn p","Ulangi kuis");b.onclick=function(){i=0;sc=0;miss={};show()};r.appendChild(b)}
+show()})();
+/* refleksi */
+var sc4=[["Saya dapat menjelaskan pengertian dan ciri permasalahan sosial","p"],["Saya mampu membedakan fakta, dugaan, dan opini","f"],["Saya aktif berkontribusi dalam kerja kelompok","k"],["Saya menjaga etika saat mengamati dan mewawancarai","e"]];
+sc4.forEach(function(s){var d=el("div","","<b>"+s[0]+"</b>"),r=el("div","scale");[1,2,3,4].forEach(function(n){var b=el("button","btn",n);b.setAttribute("aria-label",s[0]+": "+n);b.onclick=function(){r.querySelectorAll(".btn").forEach(function(x){x.classList.remove("on")});b.classList.add("on");sk[s[1]]=n;save()};r.appendChild(b)});d.appendChild(r);$("#skala").appendChild(d)});
+var ids=["nama","r1","r2","r3"];
+function save(){try{var o={sk:sk};ids.forEach(function(i){o[i]=$("#"+i).value});localStorage.setItem("refl-xi",JSON.stringify(o))}catch(e){}}
+try{var o=JSON.parse(localStorage.getItem("refl-xi")||"null");if(o){ids.forEach(function(i){$("#"+i).value=o[i]||""});sk=o.sk||{};var bs=document.querySelectorAll("#skala .scale");sc4.forEach(function(s,j){if(sk[s[1]])bs[j].children[sk[s[1]]-1].classList.add("on")})}}catch(e){}
+ids.forEach(function(i){$("#"+i).addEventListener("input",save)});
+$("#susun").onclick=function(){var v=function(i){return $("#"+i).value.trim()||"-"};
+$("#out").value="REFLEKSI SOSIOLOGI XI: Ragam Permasalahan Sosial\nNama: "+v("nama")+"\n\nSkala (1-4)\n"+sc4.map(function(s){return "- "+s[0]+": "+(sk[s[1]]||"-")}).join("\n")+"\n\nSkor game: Sortir Kasus "+(best.g1==null?"-":best.g1)+", Fakta/Dugaan/Opini "+(best.g2==null?"-":best.g2)+"\nSkor kuis: "+(quizScore==null?"-":quizScore*10)+"\n\nMasalah sosial yang selama ini saya lewatkan:\n"+v("r1")+"\n\nHal yang masih membingungkan:\n"+v("r2")+"\n\nTindakan nyata yang akan saya lakukan:\n"+v("r3");$("#salin").disabled=false};
+$("#salin").onclick=function(){var o=$("#out");o.select();try{navigator.clipboard.writeText(o.value);$("#salin").textContent="Tersalin"}catch(e){document.execCommand&&document.execCommand("copy")}};
+</script>
+</body>
+</html>
