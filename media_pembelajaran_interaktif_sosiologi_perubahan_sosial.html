@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif Sosiologi - Perubahan Sosial</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#2563EB',
+                            indigo: '#4F46E5',
+                            purple: '#7C3AED',
+                            orange: '#F97316',
+                            light: '#F8FAFC'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Kustomisasi Animasi & Scrollbar */
+        body {
+            background-color: #F1F5F9;
+            overflow-x: hidden;
+        }
+        .fade-in {
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .gradient-hero {
+            background: linear-gradient(135deg, #1E3A8A 0%, #4F46E5 50%, #7C3AED 100%);
+        }
+        .gradient-card {
+            background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-purple-200 selection:text-purple-900">
+
+    <!-- Toast Notification (Pengganti alert()) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Modal Penjelasan Media Interaktif -->
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden fade-in border border-slate-100">
+            <div class="gradient-hero px-6 py-4 flex items-center justify-between text-white">
+                <div class="flex items-center gap-3">
+                    <span id="modal-icon" class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-lg"></span>
+                    <h3 id="modal-title" class="font-display font-bold text-lg sm:text-xl">Judul Analisis</h3>
+                </div>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="p-6 max-h-[75vh] overflow-y-auto space-y-4 text-slate-700 leading-relaxed">
+                <!-- Konten dinamis -->
+            </div>
+            <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow-sm">
+                    Tutup Penjelasan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Utama Dashboard -->
+    <div class="min-h-screen flex flex-col lg:flex-row">
+
+        <!-- Mobile Header -->
+        <header class="lg:hidden gradient-hero text-white px-4 py-3.5 flex items-center justify-between sticky top-0 z-40 shadow-md">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-white/15 hover:bg-white/25 focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div>
+                    <h1 class="font-display font-bold text-sm leading-tight">SOSIOLOGI SMA</h1>
+                    <p class="text-xs text-blue-100">Perubahan Sosial</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold">
+                <i class="fa-solid fa-chart-line text-orange-300"></i>
+                <span id="mobile-progress-text">0%</span>
+            </div>
+        </header>
+
+        <!-- Sidebar Backdrop (Mobile) -->
+        <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden backdrop-blur-xs"></div>
+
+        <!-- Sidebar Navigasi -->
+        <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-50 h-screen w-72 bg-white border-r border-slate-200 flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-xl lg:shadow-none">
+            <div>
+                <!-- Brand Logo -->
+                <div class="gradient-hero p-5 text-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center shadow-lg">
+                                <i class="fa-solid fa-users-gear text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-orange-200 block">Media Interaktif</span>
+                                <h2 class="font-display font-extrabold text-base leading-tight">SOSIOLOGI SMA</h2>
+                            </div>
+                        </div>
+                        <button onclick="toggleSidebar()" class="lg:hidden text-white/80 hover:text-white p-1">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar Belajar -->
+                    <div class="mt-4 bg-black/20 rounded-xl p-3">
+                        <div class="flex justify-between text-xs font-medium mb-1.5">
+                            <span class="text-blue-100">Progress Belajar</span>
+                            <span id="sidebar-progress-text" class="text-orange-300 font-bold">0%</span>
+                        </div>
+                        <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+                            <div id="sidebar-progress-bar" class="bg-orange-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daftar Menu -->
+                <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-230px)]" id="nav-menu">
+                    <button onclick="navigateTo('beranda')" data-nav="beranda" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition text-left bg-indigo-50 text-indigo-700">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"><i class="fa-solid fa-house"></i></span>
+                        <span>Beranda Utama</span>
+                    </button>
+                    <button onclick="navigateTo('tujuan')" data-nav="tujuan" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-bullseye"></i></span>
+                        <span>1. Tujuan Pembelajaran</span>
+                    </button>
+                    <button onclick="navigateTo('materi')" data-nav="materi" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-book-open"></i></span>
+                        <span>2. Materi Pembelajaran</span>
+                    </button>
+                    <button onclick="navigateTo('media')" data-nav="media" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-images"></i></span>
+                        <span>3. Media Interaktif</span>
+                    </button>
+                    <button onclick="navigateTo('game')" data-nav="game" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-gamepad"></i></span>
+                        <span>4. Game Edukasi</span>
+                    </button>
+                    <button onclick="navigateTo('kuis')" data-nav="kuis" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-clipboard-question"></i></span>
+                        <span>5. Kuis Interaktif</span>
+                    </button>
+                    <button onclick="navigateTo('kasus')" data-nav="kasus" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-chart"></i></span>
+                        <span>6. Studi Kasus</span>
+                    </button>
+                    <button onclick="navigateTo('refleksi')" data-nav="refleksi" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-pen-nib"></i></span>
+                        <span>7. Refleksi Belajar</span>
+                    </button>
+                    <button onclick="navigateTo('hasil')" data-nav="hasil" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition text-left">
+                        <span class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-award"></i></span>
+                        <span>8. Hasil Belajar</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Identitas Pengembang di Bawah Sidebar -->
+            <div class="p-4 border-t border-slate-200 bg-slate-50">
+                <p class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Pengembang Media</p>
+                <p class="text-xs font-bold text-slate-700 mt-0.5">Vidya Ayuningtyas Risty, S.Sos.</p>
+                <p class="text-[11px] text-indigo-600 font-medium">Sosiologi SMA</p>
+            </div>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main class="flex-1 min-w-0 flex flex-col justify-between">
+            <div class="p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto">
+
+                <!-- ==================== SECTION 0: BERANDA ==================== -->
+                <section id="sec-beranda" class="page-section fade-in space-y-6">
+                    <!-- Hero Banner -->
+                    <div class="gradient-hero rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+                        <div class="absolute right-20 -bottom-16 w-48 h-48 rounded-full bg-orange-500/20 blur-xl pointer-events-none"></div>
+
+                        <div class="relative z-10 max-w-3xl">
+                            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 text-orange-200 text-xs font-bold tracking-wider uppercase mb-4 backdrop-blur-xs">
+                                <i class="fa-solid fa-graduation-cap"></i> Mata Pelajaran Sosiologi SMA
+                            </span>
+                            <h2 class="text-sm sm:text-base font-bold tracking-widest uppercase text-blue-200">
+                                MEDIA PEMBELAJARAN INTERAKTIF SOSIOLOGI
+                            </h2>
+                            <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight mt-1 mb-3 leading-tight">
+                                PERUBAHAN SOSIAL
+                            </h1>
+                            <p class="text-base sm:text-xl text-blue-100 font-medium italic mb-6">
+                                "Memahami Dinamika Perubahan dalam Kehidupan Masyarakat"
+                            </p>
+
+                            <div class="flex flex-wrap items-center gap-4 mb-8">
+                                <div class="bg-white/10 backdrop-blur-xs border border-white/20 rounded-2xl px-4 py-2.5 flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white shadow">
+                                        <i class="fa-solid fa-user-tie"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs text-blue-200 block">Pengembang:</span>
+                                        <span class="font-bold text-sm sm:text-base text-white">Vidya Ayuningtyas Risty, S.Sos.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="navigateTo('tujuan')" class="px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                                    <span>Mulai Belajar</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                                <button onclick="navigateTo('materi')" class="px-6 py-3.5 bg-white/15 hover:bg-white/25 text-white font-semibold rounded-xl backdrop-blur-xs transition flex items-center gap-2">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <span>Langsung ke Materi</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ringkasan Statistik Dashboard -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium">Submateri</p>
+                                <p class="text-xl font-extrabold text-slate-800">8 Modul</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-gamepad"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium">Game Edukasi</p>
+                                <p class="text-xl font-extrabold text-slate-800">3 Permainan</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-circle-question"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium">Evaluasi Kuis</p>
+                                <p class="text-xl font-extrabold text-slate-800">15 Soal HOTS</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 font-medium">Progress Kamu</p>
+                                <p id="home-progress-stat" class="text-xl font-extrabold text-indigo-600">0%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid 8 Menu Utama -->
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-compass text-indigo-600"></i> Jelajahi Menu Pembelajaran
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="navigateTo('tujuan')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-600 transition">1. Tujuan Pembelajaran</h4>
+                                <p class="text-xs text-slate-500 mt-1">Target kompetensi & capaian belajar perubahan sosial.</p>
+                            </button>
+
+                            <button onclick="navigateTo('materi')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-purple-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-purple-600 transition">2. Materi Pembelajaran</h4>
+                                <p class="text-xs text-slate-500 mt-1">Konsep, bentuk, faktor, teori, hingga era digital.</p>
+                            </button>
+
+                            <button onclick="navigateTo('media')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-images"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-indigo-600 transition">3. Media Interaktif</h4>
+                                <p class="text-xs text-slate-500 mt-1">Perbandingan visual masyarakat dulu vs sekarang.</p>
+                            </button>
+
+                            <button onclick="navigateTo('game')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-orange-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-gamepad"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-orange-600 transition">4. Game Edukasi</h4>
+                                <p class="text-xs text-slate-500 mt-1">Tebak konsep, Benar/Salah & Detektif Sosial.</p>
+                            </button>
+
+                            <button onclick="navigateTo('kuis')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-clipboard-question"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-blue-600 transition">5. Kuis Interaktif</h4>
+                                <p class="text-xs text-slate-500 mt-1">15 soal evaluasi pilihan ganda dengan pembahasan.</p>
+                            </button>
+
+                            <button onclick="navigateTo('kasus')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-purple-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-purple-600 transition">6. Studi Kasus</h4>
+                                <p class="text-xs text-slate-500 mt-1">Analisis fenomena nyata remaja, belanja & budaya.</p>
+                            </button>
+
+                            <button onclick="navigateTo('refleksi')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-indigo-600 transition">7. Refleksi Pembelajaran</h4>
+                                <p class="text-xs text-slate-500 mt-1">Catatan pemaknaan diri menyikapi perubahan.</p>
+                            </button>
+
+                            <button onclick="navigateTo('hasil')" class="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-orange-400 hover:shadow-md transition text-left">
+                                <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition flex items-center justify-center text-lg mb-3">
+                                    <i class="fa-solid fa-award"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 group-hover:text-orange-600 transition">8. Hasil Belajar</h4>
+                                <p class="text-xs text-slate-500 mt-1">Rekap nilai kuis, game, status ketuntasan & penutup.</p>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 1: TUJUAN PEMBELAJARAN ==================== -->
+                <section id="sec-tujuan" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Menu 1</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Tujuan Pembelajaran</h2>
+                                <p class="text-slate-500 text-sm mt-1">Klik setiap tujuan di bawah ini untuk menandai target pemahamanmu!</p>
+                            </div>
+                            <div class="bg-indigo-50 px-4 py-2.5 rounded-2xl border border-indigo-100 text-right">
+                                <span class="text-xs text-indigo-600 font-semibold block">Target Tercapai</span>
+                                <span id="tujuan-counter" class="text-lg font-extrabold text-indigo-800">0 / 6 Tujuan</span>
+                            </div>
+                        </div>
+
+                        <div id="tujuan-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Diisi via JS -->
+                        </div>
+
+                        <div class="mt-8 pt-5 border-t border-slate-100 flex flex-wrap justify-between gap-3">
+                            <button onclick="navigateTo('beranda')" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition flex items-center gap-2">
+                                <i class="fa-solid fa-house"></i> Beranda
+                            </button>
+                            <button onclick="navigateTo('materi')" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition flex items-center gap-2 shadow-sm">
+                                Lanjut ke Materi <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 2: MATERI PEMBELAJARAN ==================== -->
+                <section id="sec-materi" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Menu 2 • Modul Sistematis</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Materi Perubahan Sosial</h2>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <!-- Tab Submateri A - H -->
+                        <div class="flex gap-2 overflow-x-auto pb-3 mb-6 border-b border-slate-100" id="materi-tabs">
+                            <!-- Diisi via JS -->
+                        </div>
+
+                        <!-- Konten Submateri Aktif -->
+                        <div id="materi-content" class="min-h-[380px]">
+                            <!-- Diisi via JS -->
+                        </div>
+
+                        <!-- Navigasi Materi Sebelumnya & Berikutnya -->
+                        <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                            <button id="btn-prev-materi" onclick="changeMateri(-1)" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-left"></i> Materi Sebelumnya
+                            </button>
+                            <span id="materi-page-indicator" class="text-sm font-bold text-slate-500">Bagian 1 dari 8</span>
+                            <button id="btn-next-materi" onclick="changeMateri(1)" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition flex items-center gap-2 shadow-sm">
+                                Materi Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 3: MEDIA INTERAKTIF ==================== -->
+                <section id="sec-media" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Menu 3 • Galeri Visual</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Media Interaktif: Dulu vs Sekarang</h2>
+                                <p class="text-slate-500 text-sm mt-1">Amati ilustrasi perbandingan perubahan sosial berikut dan klik tombol penjelasan sosiologisnya.</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <div id="media-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Diisi via JS -->
+                        </div>
+
+                        <div class="mt-8 pt-5 border-t border-slate-100 flex justify-between">
+                            <button onclick="navigateTo('materi')" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 transition">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Materi
+                            </button>
+                            <button onclick="navigateTo('game')" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold transition shadow-sm">
+                                Main Game Edukasi <i class="fa-solid fa-gamepad ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 4: GAME EDUKASI ==================== -->
+                <section id="sec-game" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-3 py-1 rounded-full">Menu 4 • Gamifikasi Belajar</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Game Edukasi Sosiologi</h2>
+                                <p class="text-slate-500 text-sm mt-1">Pilih dan mainkan 3 tantangan interaktif untuk menguji pemahamanmu!</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <!-- Selector 3 Game -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <button onclick="switchGame(1)" id="tab-game-1" class="p-4 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-left transition">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-extrabold uppercase text-indigo-600">Game 1</span>
+                                    <span id="badge-score-g1" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-600 text-white">Skor: 0</span>
+                                </div>
+                                <h3 class="font-bold text-slate-800 text-base">Tebak Konsep</h3>
+                                <p class="text-xs text-slate-500 mt-1">Cocokkan deskripsi dengan istilah perubahan sosial.</p>
+                            </button>
+
+                            <button onclick="switchGame(2)" id="tab-game-2" class="p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-purple-300 text-left transition">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-extrabold uppercase text-purple-600">Game 2</span>
+                                    <span id="badge-score-g2" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700">Skor: 0</span>
+                                </div>
+                                <h3 class="font-bold text-slate-800 text-base">Benar atau Salah</h3>
+                                <p class="text-xs text-slate-500 mt-1">Uji ketelitian pada 10 pernyataan sosiologis.</p>
+                            </button>
+
+                            <button onclick="switchGame(3)" id="tab-game-3" class="p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-orange-300 text-left transition">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-extrabold uppercase text-orange-600">Game 3</span>
+                                    <span id="badge-score-g3" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700">Skor: 0</span>
+                                </div>
+                                <h3 class="font-bold text-slate-800 text-base">Detektif Perubahan Sosial</h3>
+                                <p class="text-xs text-slate-500 mt-1">Bedah 5 kasus nyata: bentuk, faktor & dampaknya.</p>
+                            </button>
+                        </div>
+
+                        <!-- Arena Game -->
+                        <div id="game-arena" class="bg-slate-50 rounded-2xl p-5 sm:p-7 border border-slate-200">
+                            <!-- Konten game aktif dirender via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 5: KUIS INTERAKTIF ==================== -->
+                <section id="sec-kuis" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Menu 5 • Evaluasi Akhir</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Kuis Interaktif (15 Soal HOTS)</h2>
+                                <p class="text-slate-500 text-sm mt-1">Pilih satu jawaban terbaik. Pembahasan langsung muncul setelah menjawab!</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <div id="kuis-container">
+                            <!-- Konten kuis via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 6: STUDI KASUS ==================== -->
+                <section id="sec-kasus" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Menu 6 • Berpikir Kritis</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Studi Kasus Fenomena Sosial</h2>
+                                <p class="text-slate-500 text-sm mt-1">Analisis 4 fenomena masyarakat berikut menggunakan 5 pertanyaan pemandu sosiologis.</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <!-- Pilihan Kasus 1-4 -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6" id="kasus-tabs">
+                            <!-- Diisi via JS -->
+                        </div>
+
+                        <!-- Form Analisis Kasus -->
+                        <div id="kasus-workspace" class="bg-slate-50 rounded-2xl p-5 sm:p-6 border border-slate-200">
+                            <!-- Diisi via JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 7: REFLEKSI PEMBELAJARAN ==================== -->
+                <section id="sec-refleksi" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Menu 7 • Pemaknaan Diri</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Refleksi Pembelajaran</h2>
+                                <p class="text-slate-500 text-sm mt-1">Tuliskan pemahaman dan sikapmu terhadap perubahan sosial di sekitarmu.</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <form id="refleksi-form" onsubmit="saveRefleksi(event)" class="space-y-5">
+                            <div>
+                                <label class="block font-bold text-slate-800 mb-1.5">1. Apa pengetahuan baru yang saya peroleh dari materi Perubahan Sosial ini?</label>
+                                <textarea id="ref-1" rows="3" required placeholder="Tuliskan konsep atau wawasan baru yang paling berkesan..." class="w-full rounded-xl border border-slate-300 p-3.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-800 mb-1.5">2. Perubahan sosial apa yang paling dekat dengan kehidupan saya sehari-hari?</label>
+                                <textarea id="ref-2" rows="3" required placeholder="Contoh: perubahan cara berkomunikasi, belajar digital, gaya hidup..." class="w-full rounded-xl border border-slate-300 p-3.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-800 mb-1.5">3. Apa dampak positif dan negatif yang saya rasakan dari perubahan tersebut?</label>
+                                <textarea id="ref-3" rows="3" required placeholder="Jelaskan dampak positif maupun tantangan/dampak negatif yang kamu alami..." class="w-full rounded-xl border border-slate-300 p-3.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-800 mb-1.5">4. Bagaimana sikap bijak saya dalam menghadapi perubahan sosial ke depan?</label>
+                                <textarea id="ref-4" rows="3" required placeholder="Tuliskan komitmen sikap selektif dan kritis yang akan kamu lakukan..." class="w-full rounded-xl border border-slate-300 p-3.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"></textarea>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                                <button type="submit" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-sm transition flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan Refleksi Saya
+                                </button>
+                                <button type="button" onclick="navigateTo('hasil')" class="px-5 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold transition flex items-center gap-2">
+                                    Lihat Hasil Belajar <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Ringkasan Refleksi Tersimpan -->
+                        <div id="refleksi-summary" class="hidden mt-6 p-5 rounded-2xl bg-indigo-50 border border-indigo-200 space-y-3">
+                            <div class="flex items-center gap-2 text-indigo-800 font-bold">
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                                <span>Jurnal Refleksi Tersimpan!</span>
+                            </div>
+                            <div id="refleksi-output" class="text-sm text-slate-700 space-y-2"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 8: HASIL BELAJAR & HALAMAN PENUTUP ==================== -->
+                <section id="sec-hasil" class="page-section hidden fade-in space-y-6">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-3 py-1 rounded-full">Menu 8 • Laporan Capaian</span>
+                                <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-slate-800 mt-2">Rekap Hasil Belajar</h2>
+                                <p class="text-slate-500 text-sm mt-1">Ringkasan otomatis skor evaluasi, permainan edukasi, dan ketuntasan belajarmu.</p>
+                            </div>
+                            <button onclick="navigateTo('beranda')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">
+                                <i class="fa-solid fa-house mr-1"></i> Menu Utama
+                            </button>
+                        </div>
+
+                        <!-- Kartu Skor Utama -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+                                <span class="text-xs font-bold uppercase text-blue-600">Skor Kuis Interaktif</span>
+                                <p id="res-kuis-score" class="text-3xl font-extrabold text-blue-900 mt-1">0</p>
+                                <span class="text-xs text-blue-700">Skala 0 – 100</span>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-purple-50 border border-purple-200">
+                                <span class="text-xs font-bold uppercase text-purple-600">Rata-rata Game</span>
+                                <p id="res-game-avg" class="text-3xl font-extrabold text-purple-900 mt-1">0</p>
+                                <span id="res-game-detail" class="text-xs text-purple-700">G1: 0 | G2: 0 | G3: 0</span>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-indigo-50 border border-indigo-200">
+                                <span class="text-xs font-bold uppercase text-indigo-600">Progress Modul</span>
+                                <p id="res-progress" class="text-3xl font-extrabold text-indigo-900 mt-1">0%</p>
+                                <span class="text-xs text-indigo-700">Aktivitas terselesaikan</span>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-orange-50 border border-orange-200">
+                                <span class="text-xs font-bold uppercase text-orange-600">Status Ketuntasan</span>
+                                <p id="res-status" class="text-xl font-extrabold text-orange-800 mt-2">Belum Selesai</p>
+                                <span class="text-xs text-orange-700">KKM Kuis: ≥ 75</span>
+                            </div>
+                        </div>
+
+                        <!-- Kotak Motivasi -->
+                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Pesan Motivasi Belajar</h4>
+                                    <p id="res-motivation" class="text-sm text-slate-600 mt-0.5">Ayo selesaikan materi, permainan edukasi, dan kuis interaktif untuk melihat predikat capaianmu!</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2 shrink-0">
+                                <button onclick="retryQuizFromResult()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition flex items-center gap-2">
+                                    <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                                </button>
+                                <button onclick="resetAllProgress()" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition">
+                                    Reset Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- HALAMAN PENUTUP KHUSUS -->
+                        <div class="gradient-hero rounded-3xl p-8 sm:p-10 text-center text-white shadow-xl relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.25),transparent_50%)]"></div>
+                            <div class="relative z-10 max-w-2xl mx-auto space-y-4">
+                                <div class="w-14 h-14 rounded-2xl bg-orange-500 mx-auto flex items-center justify-center text-2xl shadow-lg">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <h3 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                                    SELAMAT BELAJAR DAN TERUS BERPIKIR KRITIS!
+                                </h3>
+                                <p class="text-base sm:text-lg text-blue-100 italic font-medium">
+                                    "Perubahan sosial tidak dapat dihindari, tetapi kita dapat menentukan bagaimana menyikapinya."
+                                </p>
+                                <div class="pt-4 border-t border-white/20 inline-block px-6">
+                                    <p class="text-xs uppercase tracking-widest text-orange-200 font-semibold">Dikembangkan oleh:</p>
+                                    <p class="text-lg font-bold text-white mt-0.5">Vidya Ayuningtyas Risty, S.Sos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer Global -->
+            <footer class="bg-white border-t border-slate-200 py-4 px-6 text-center text-xs text-slate-500">
+                <p>Media Pembelajaran Interaktif Sosiologi SMA • Materi: <strong>Perubahan Sosial</strong> • Pengembang: <strong>Vidya Ayuningtyas Risty, S.Sos.</strong></p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIKA APLIKASI ==================== -->
+    <script>
+        // ==================== STATE APLIKASI ====================
+        const appState = {
+            currentPage: 'beranda',
+            tujuanChecked: [false, false, false, false, false, false],
+            currentMateriIdx: 0,
+            materiRead: [true, false, false, false, false, false, false, false],
+            mediaViewed: [false, false, false, false, false],
+            game1Score: 0,
+            game2Score: 0,
+            game3Score: 0,
+            quizScore: null,
+            kasusCompleted: [false, false, false, false],
+            refleksiSaved: false
+        };
+
+        // ==================== NOTIFIKASI TOAST ====================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = {
+                success: 'bg-emerald-600 text-white',
+                error: 'bg-rose-600 text-white',
+                info: 'bg-indigo-700 text-white'
+            };
+            toast.className = `${colors[type] || colors.info} px-4 py-3 rounded-xl shadow-lg text-sm font-semibold flex items-center gap-2.5 fade-in`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info'}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2800);
+        }
+
+        // ==================== NAVIGASI & SIDEBAR ====================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        function navigateTo(pageId) {
+            appState.currentPage = pageId;
+
+            // Sembunyikan semua section
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+            // Tampilkan section tujuan
+            const target = document.getElementById(`sec-${pageId}`);
+            if (target) target.classList.remove('hidden');
+
+            // Update styling tombol navigasi
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.nav === pageId) {
+                    btn.classList.remove('text-slate-600', 'hover:bg-slate-100', 'font-medium');
+                    btn.classList.add('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                } else {
+                    btn.classList.add('text-slate-600', 'hover:bg-slate-100', 'font-medium');
+                    btn.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-semibold');
+                }
+            });
+
+            // Tutup sidebar di mobile setelah klik
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+
+            if (pageId === 'hasil') updateHasilBelajar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateProgress();
+        }
+
+        // ==================== HITUNG PROGRESS BELAJAR ====================
+        function updateProgress() {
+            let points = 0;
+            const maxPoints = 24;
+
+            // 1. Tujuan (maks 3 poin)
+            const tCount = appState.tujuanChecked.filter(Boolean).length;
+            points += (tCount / 6) * 3;
+
+            // 2. Materi dibaca (maks 8 poin)
+            points += appState.materiRead.filter(Boolean).length;
+
+            // 3. Media dilihat (maks 3 poin)
+            points += (appState.mediaViewed.filter(Boolean).length / 5) * 3;
+
+            // 4. Game dimainkan (maks 3 poin)
+            if (appState.game1Score > 0) points += 1;
+            if (appState.game2Score > 0) points += 1;
+            if (appState.game3Score > 0) points += 1;
+
+            // 5. Kuis selesai (maks 4 poin)
+            if (appState.quizScore !== null) points += 4;
+
+            // 6. Studi kasus (maks 2 poin)
+            points += (appState.kasusCompleted.filter(Boolean).length / 4) * 2;
+
+            // 7. Refleksi (maks 1 poin)
+            if (appState.refleksiSaved) points += 1;
+
+            const pct = Math.min(100, Math.round((points / maxPoints) * 100));
+            document.getElementById('sidebar-progress-text').textContent = `${pct}%`;
+            document.getElementById('sidebar-progress-bar').style.width = `${pct}%`;
+            document.getElementById('mobile-progress-text').textContent = `${pct}%`;
+            document.getElementById('home-progress-stat').textContent = `${pct}%`;
+            return pct;
+        }
+
+        // ==================== 1. TUJUAN PEMBELAJARAN ====================
+        const tujuanData = [
+            { title: "Memahami Pengertian Perubahan Sosial", desc: "Menjelaskan hakikat perubahan sosial menurut kajian sosiologi dan pandangan para ahli." },
+            { title: "Mengidentifikasi Karakteristik & Bentuk", desc: "Membedakan ciri-ciri serta ragam bentuk perubahan sosial (lambat/cepat, kecil/besar, direncanakan/tidak, progres/regres)." },
+            { title: "Menganalisis Faktor Pendorong & Penghambat", desc: "Menguraikan faktor internal, eksternal, pendorong, dan penghambat terjadinya perubahan di masyarakat." },
+            { title: "Memahami Teori-Teori Perubahan Sosial", desc: "Membandingkan perspektif Teori Evolusi, Konflik, Siklus, dan Fungsional dalam melihat dinamika sosial." },
+            { title: "Menganalisis Dampak Positif & Negatif", desc: "Mengevaluasi konsekuensi perubahan sosial seperti modernisasi, globalisasi, hingga disorganisasi sosial." },
+            { title: "Memberikan Contoh Kehidupan Sehari-hari", desc: "Menemukan dan menyikapi secara kritis fenomena perubahan sosial di lingkungan sekitar dan era digital." }
+        ];
+
+        function renderTujuan() {
+            const container = document.getElementById('tujuan-list');
+            container.innerHTML = tujuanData.map((item, idx) => {
+                const checked = appState.tujuanChecked[idx];
+                return `
+                    <div onclick="toggleTujuan(${idx})" class="cursor-pointer p-4 rounded-2xl border-2 transition flex items-start gap-3.5 ${checked ? 'border-emerald-500 bg-emerald-50/60' : 'border-slate-200 hover:border-indigo-300 bg-white'}">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${checked ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'}">
+                            <i class="fa-solid ${checked ? 'fa-check' : 'fa-circle'} text-xs"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm sm:text-base">${idx + 1}. ${item.title}</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-1">${item.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            const count = appState.tujuanChecked.filter(Boolean).length;
+            document.getElementById('tujuan-counter').textContent = `${count} / 6 Tujuan`;
+        }
+
+        function toggleTujuan(idx) {
+            appState.tujuanChecked[idx] = !appState.tujuanChecked[idx];
+            renderTujuan();
+            updateProgress();
+        }
+
+        // ==================== 2. MATERI PEMBELAJARAN ====================
+        const materiModules = [
+            {
+                code: "A",
+                title: "Pengertian Perubahan Sosial",
+                icon: "fa-globe",
+                color: "blue",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-blue-50 p-3">
+                    <circle cx="65" cy="65" r="35" fill="#93C5FD" opacity="0.5"/>
+                    <circle cx="65" cy="65" r="22" fill="#2563EB"/>
+                    <path d="M110 65 L145 65 M137 57 L145 65 L137 73" stroke="#F97316" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <rect x="155" y="32" width="60" height="66" rx="12" fill="#7C3AED"/>
+                    <circle cx="185" cy="55" r="10" fill="#FDE047"/>
+                    <rect x="168" y="72" width="34" height="6" rx="3" fill="#FFF"/>
+                </svg>`,
+                summary: "Perubahan sosial adalah segala perubahan pada lembaga-lembaga kemasyarakatan di dalam suatu masyarakat yang memengaruhi sistem sosialnya, termasuk nilai-nilai, sikap, dan pola perilaku di antara kelompok-kelompok dalam masyarakat.",
+                points: [
+                    "<strong>Selo Soemardjan:</strong> Perubahan pada lembaga kemasyarakatan yang memengaruhi sistem sosialnya, mencakup nilai, sikap, dan pola perilaku.",
+                    "<strong>Kingsley Davis:</strong> Perubahan-perubahan yang terjadi dalam struktur dan fungsi masyarakat.",
+                    "<strong>Gillin & Gillin:</strong> Variasi dari cara-cara hidup yang telah diterima, baik karena perubahan kondisi geografis, kebudayaan material, komposisi penduduk, ideologi, maupun difusi."
+                ],
+                example: "Beralihnya interaksi tatap muka di warung kopi atau balai desa menjadi interaksi melalui grup WhatsApp dan ruang diskusi daring."
+            },
+            {
+                code: "B",
+                title: "Ciri-Ciri Perubahan Sosial",
+                icon: "fa-list-check",
+                color: "purple",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-purple-50 p-3">
+                    <circle cx="50" cy="65" r="18" fill="#7C3AED"/>
+                    <circle cx="120" cy="35" r="16" fill="#2563EB"/>
+                    <circle cx="120" cy="95" r="16" fill="#F97316"/>
+                    <circle cx="190" cy="65" r="20" fill="#4F46E5"/>
+                    <line x1="68" y1="58" x2="104" y2="40" stroke="#94A3B8" stroke-width="3"/>
+                    <line x1="68" y1="72" x2="104" y2="90" stroke="#94A3B8" stroke-width="3"/>
+                    <line x1="136" y1="40" x2="170" y2="58" stroke="#94A3B8" stroke-width="3"/>
+                    <line x1="136" y1="90" x2="170" y2="72" stroke="#94A3B8" stroke-width="3"/>
+                </svg>`,
+                summary: "Setiap masyarakat senantiasa dinamis dan mengalami perubahan dengan karakteristik sosiologis yang khas.",
+                points: [
+                    "<strong>Tidak ada masyarakat yang berhenti berkembang (statis):</strong> Setiap masyarakat pasti mengalami perubahan baik lambat maupun cepat.",
+                    "<strong>Perubahan pada satu lembaga diikuti lembaga lain (mata rantai):</strong> Perubahan teknologi memengaruhi ekonomi, pendidikan, dan keluarga.",
+                    "<strong>Perubahan cepat sering menimbulkan disorganisasi sementara:</strong> Masyarakat butuh waktu beradaptasi terhadap nilai baru.",
+                    "<strong>Tidak dapat dibatasi pada bidang kebendaan atau spiritual saja:</strong> Keduanya saling berkaitan erat."
+                ],
+                example: "Munculnya internet cepat (bidang teknologi) mengubah cara berjualan (ekonomi), cara belajar siswa (pendidikan), hingga pola asuh orang tua (keluarga)."
+            },
+            {
+                code: "C",
+                title: "Bentuk-Bentuk Perubahan Sosial",
+                icon: "fa-shapes",
+                color: "indigo",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-indigo-50 p-3">
+                    <path d="M25 100 Q 75 95, 115 70 T 215 25" stroke="#4F46E5" stroke-width="4" fill="none"/>
+                    <circle cx="65" cy="91" r="6" fill="#F97316"/>
+                    <circle cx="135" cy="61" r="6" fill="#F97316"/>
+                    <circle cx="205" cy="28" r="8" fill="#10B981"/>
+                    <text x="25" y="25" font-size="11" font-weight="bold" fill="#312E81">Evolusi vs Revolusi</text>
+                </svg>`,
+                summary: "Sosiologi mengklasifikasikan bentuk perubahan sosial berdasarkan kecepatan, ukuran pengaruh, perencanaan, dan arah tujuannya.",
+                points: [
+                    "<strong>Lambat (Evolusi) vs Cepat (Revolusi):</strong> Evolusi berlangsung lama tanpa kehendak tertentu (perubahan masyarakat berburu ke agraris). Revolusi berlangsung cepat dan menyangkut sendi pokok kehidupan (Revolusi Industri, Reformasi 1998).",
+                    "<strong>Kecil vs Besar:</strong> Perubahan kecil tidak memengaruhi struktur sosial (tren model rambut/pakaian). Perubahan besar mengubah struktur masyarakat (industrialisasi).",
+                    "<strong>Direncanakan (Planned) vs Tidak Direncanakan (Unplanned):</strong> Direncanakan melalui program pemerintah (pembangunan jalan tol, program KB). Tidak direncanakan terjadi di luar kendali (dampak pandemi atau bencana alam).",
+                    "<strong>Progres vs Regres:</strong> Progres membawa kemajuan/kemudahan (listrik masuk desa). Regres membawa kemunduran/kerugian (penyalahgunaan narkoba, kerusakan moral)."
+                ],
+                example: "Program digitalisasi sekolah adalah perubahan direncanakan dan progres, sedangkan perubahan tren gaya potongan rambut remaja adalah perubahan kecil."
+            },
+            {
+                code: "D",
+                title: "Faktor Penyebab Perubahan Sosial",
+                icon: "fa-gears",
+                color: "orange",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-orange-50 p-3">
+                    <rect x="20" y="25" width="85" height="80" rx="12" fill="#2563EB"/>
+                    <text x="62" y="62" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">INTERNAL</text>
+                    <text x="62" y="78" text-anchor="middle" font-size="9" fill="#DBEAFE">Dari Dalam</text>
+                    <rect x="135" y="25" width="85" height="80" rx="12" fill="#F97316"/>
+                    <text x="177" y="62" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">EKSTERNAL</text>
+                    <text x="177" y="78" text-anchor="middle" font-size="9" fill="#FFEDD5">Dari Luar</text>
+                </svg>`,
+                summary: "Perubahan sosial bersumber dari dalam masyarakat itu sendiri (internal) maupun dari luar masyarakat (eksternal).",
+                points: [
+                    "<strong>Faktor Internal:</strong> (1) Pertambahan atau pengurangan penduduk (urbanisasi membuat kota padat); (2) Penemuan baru: <em>Discovery</em> (penemuan unsur baru) & <em>Invention</em> (pengembangan/penerapan penemuan); (3) Konflik sosial antar kelompok/generasi; (4) Pemberontakan atau revolusi.",
+                    "<strong>Faktor Eksternal:</strong> (1) Perubahan lingkungan fisik/alam (gempa bumi, banjir bandang mengubah mata pencaharian); (2) Peperangan dengan negara lain; (3) Pengaruh kebudayaan masyarakat lain melalui difusi (penyebaran), akulturasi (perpaduan tanpa menghilangkan budaya asli), dan asimilasi (peleburan budaya baru)."
+                ],
+                example: "Penemuan smartphone (internal) dan masuknya budaya pop Korea/K-Pop melalui media global (eksternal)."
+            },
+            {
+                code: "E",
+                title: "Faktor Pendorong & Penghambat",
+                icon: "fa-scale-balanced",
+                color: "blue",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-blue-50 p-3">
+                    <polygon points="45,95 85,35 125,95" fill="#10B981"/>
+                    <text x="85" y="114" text-anchor="middle" font-size="10" font-weight="bold" fill="#065F46">Pendorong (+)</text>
+                    <rect x="145" y="45" width="60" height="50" rx="8" fill="#EF4444"/>
+                    <text x="175" y="114" text-anchor="middle" font-size="10" font-weight="bold" fill="#991B1B">Penghambat (-)</text>
+                </svg>`,
+                summary: "Laju perubahan sosial di setiap daerah berbeda karena adanya faktor yang mempercepat dan faktor yang memperlambat.",
+                points: [
+                    "<strong>Faktor Pendorong:</strong> Kontak dengan kebudayaan lain, sistem pendidikan formal yang maju, sikap menghargai hasil karya orang lain, toleransi terhadap perbuatan menyimpang yang positif, sistem pelapisan sosial terbuka, penduduk yang heterogen, serta orientasi ke masa depan.",
+                    "<strong>Faktor Penghambat:</strong> Kurangnya hubungan dengan masyarakat lain (terisolasi), perkembangan ilmu pengetahuan yang terlambat, sikap masyarakat yang sangat tradisional, adanya kepentingan yang tertanam kuat (<em>vested interest</em>), rasa takut akan kegoyahan integrasi kebudayaan, dan prasangka terhadap hal-hal baru/asing."
+                ],
+                example: "Masyarakat perkotaan dengan akses pendidikan tinggi cepat menerima teknologi baru (pendorong), sedangkan komunitas adat yang menutup diri dari dunia luar cenderung mempertahankan tradisi lama (penghambat)."
+            },
+            {
+                code: "F",
+                title: "Teori-Teori Perubahan Sosial",
+                icon: "fa-diagram-project",
+                color: "purple",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-purple-50 p-3">
+                    <circle cx="65" cy="65" r="28" stroke="#7C3AED" stroke-width="4" fill="none" stroke-dasharray="10 5"/>
+                    <text x="65" y="69" text-anchor="middle" font-size="10" font-weight="bold" fill="#5B21B6">Siklus</text>
+                    <line x1="125" y1="90" x2="210" y2="35" stroke="#2563EB" stroke-width="4"/>
+                    <polygon points="210,35 198,36 205,46" fill="#2563EB"/>
+                    <text x="170" y="90" text-anchor="middle" font-size="10" font-weight="bold" fill="#1E40AF">Evolusi Linear</text>
+                </svg>`,
+                summary: "Para sosiolog merumuskan empat teori utama untuk menjelaskan pola dan arah perubahan masyarakat.",
+                points: [
+                    "<strong>1. Teori Evolusi (Linear):</strong> Masyarakat berkembang secara bertahap dari sederhana menuju kompleks dan modern (Auguste Comte, Herbert Spencer).",
+                    "<strong>2. Teori Konflik:</strong> Perubahan sosial terjadi karena adanya pertentangan kelas atau kepentingan antar kelompok dalam masyarakat (Karl Marx, Ralf Dahrendorf).",
+                    "<strong>3. Teori Siklus:</strong> Perubahan masyarakat bagaikan roda yang berputar; peradaban mengalami fase lahir, berkembang, puncak kejayaan, lalu mundur dan berulang kembali (Arnold Toynbee, Pitirim Sorokin).",
+                    "<strong>4. Teori Fungsional (Keseimbangan):</strong> Masyarakat dipandang sebagai sistem yang saling terhubung; perubahan terjadi untuk menyesuaikan diri demi menjaga keseimbangan (<em>equilibrium</em>) sosial (Talcott Parsons)."
+                ],
+                example: "Tren mode pakaian tahun 1980-an atau 1990-an (gaya retro/vintage) yang kembali populer di kalangan anak muda saat ini mencerminkan Teori Siklus."
+            },
+            {
+                code: "G",
+                title: "Dampak Positif & Negatif Perubahan Sosial",
+                icon: "fa-bolt",
+                color: "indigo",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-indigo-50 p-3">
+                    <rect x="25" y="25" width="90" height="80" rx="14" fill="#10B981"/>
+                    <text x="70" y="60" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">POSITIF</text>
+                    <text x="70" y="76" text-anchor="middle" font-size="9" fill="#ECFDF5">Efisiensi & Maju</text>
+                    <rect x="125" y="25" width="90" height="80" rx="14" fill="#F97316"/>
+                    <text x="170" y="60" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">NEGATIF</text>
+                    <text x="170" y="76" text-anchor="middle" font-size="9" fill="#FFF7ED">Culture Shock/Lag</text>
+                </svg>`,
+                summary: "Setiap perubahan sosial membawa dua sisi mata uang: peluang kemajuan sekaligus tantangan sosial yang harus diantisipasi.",
+                points: [
+                    "<strong>Dampak Positif:</strong> Munculnya nilai dan norma baru yang lebih sesuai tuntutan zaman, berkembangnya ilmu pengetahuan dan teknologi, tingkat pendidikan dan kesejahteraan meningkat, efektivitas dan efisiensi kerja tinggi, serta kesetaraan gender.",
+                    "<strong>Dampak Negatif:</strong> <em>Culture Shock</em> (gegar budaya saat menghadapi budaya baru), <em>Culture Lag</em> (ketertinggalan budaya karena unsur non-material lambat mengejar teknologi), disorganisasi sosial, pudarnya solidaritas gotong royong, konsumerisme, dan kenakalan remaja."
+                ],
+                example: "Tersedianya fasilitas pembayaran digital QRIS mempermudah transaksi (positif), namun perilaku membuang sampah sembarangan di sungai meski sudah ada aturan modern menunjukkan <em>culture lag</em> (negatif)."
+            },
+            {
+                code: "H",
+                title: "Perubahan Sosial di Era Digital",
+                icon: "fa-mobile-screen-button",
+                color: "orange",
+                illustration: `<svg viewBox="0 0 240 130" class="w-full h-36 rounded-xl bg-orange-50 p-3">
+                    <rect x="90" y="18" width="60" height="94" rx="10" fill="#1E293B"/>
+                    <rect x="95" y="26" width="50" height="72" rx="4" fill="#38BDF8"/>
+                    <circle cx="120" cy="105" r="3" fill="#94A3B8"/>
+                    <circle cx="50" cy="50" r="14" fill="#7C3AED"/>
+                    <circle cx="190" cy="50" r="14" fill="#F97316"/>
+                    <line x1="64" y1="50" x2="90" y2="55" stroke="#64748B" stroke-width="2" stroke-dasharray="3 3"/>
+                    <line x1="150" y1="55" x2="176" y2="50" stroke="#64748B" stroke-width="2" stroke-dasharray="3 3"/>
+                </svg>`,
+                summary: "Revolusi Industri 4.0 dan Society 5.0 telah mentransformasi hampir seluruh aspek interaksi manusia di ruang digital.",
+                points: [
+                    "<strong>Interaksi & Komunikasi:</strong> Lahirnya masyarakat jejaring (<em>network society</em>); komunikasi lintas negara terjadi secara <em>real-time</em> melalui media sosial.",
+                    "<strong>Ekonomi Digital:</strong> Pergeseran dari toko fisik ke <em>e-commerce</em>, dompet digital (<em>e-wallet</em>), hingga munculnya profesi baru seperti kreator konten dan pengembang AI.",
+                    "<strong>Pendidikan & Literasi:</strong> Pembelajaran berbasis daring, akses sumber belajar terbuka, dan pemanfaatan kecerdasan artifisial.",
+                    "<strong>Tantangan Digital:</strong> Fenomena FOMO (<em>Fear of Missing Out</em>), penyebaran hoaks, <em>cyberbullying</em>, dan melemahnya interaksi tatap muka langsung di lingkungan keluarga."
+                ],
+                example: "Siswa SMA kini dapat berkolaborasi mengerjakan tugas kelompok melalui Google Docs dan mengakses media pembelajaran interaktif dari rumah."
+            }
+        ];
+
+        function renderMateri() {
+            // Render Tab Submateri
+            const tabsContainer = document.getElementById('materi-tabs');
+            tabsContainer.innerHTML = materiModules.map((m, idx) => {
+                const active = idx === appState.currentMateriIdx;
+                return `
+                    <button onclick="selectMateri(${idx})" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition flex items-center gap-2 ${active ? 'bg-indigo-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+                        <span class="w-5 h-5 rounded-md ${active ? 'bg-white/20 text-white' : 'bg-white text-indigo-600'} flex items-center justify-center text-xs">${m.code}</span>
+                        <span>${m.title.replace('Perubahan Sosial', '').trim() || m.title}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // Render Konten Aktif
+            const mod = materiModules[appState.currentMateriIdx];
+            appState.materiRead[appState.currentMateriIdx] = true;
+
+            const contentDiv = document.getElementById('materi-content');
+            contentDiv.innerHTML = `
+                <div class="fade-in space-y-5">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center bg-slate-50 p-5 rounded-2xl border border-slate-200/80">
+                        <div class="lg:col-span-2 space-y-2">
+                            <div class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-indigo-600">
+                                <i class="fa-solid ${mod.icon}"></i> Submateri ${mod.code}
+                            </div>
+                            <h3 class="font-display text-xl sm:text-2xl font-extrabold text-slate-800">${mod.title}</h3>
+                            <p class="text-sm sm:text-base text-slate-700 leading-relaxed">${mod.summary}</p>
+                        </div>
+                        <div>
+                            ${mod.illustration}
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-dot text-purple-600"></i> Poin-Poin Penting:
+                        </h4>
+                        <ul class="space-y-2.5">
+                            ${mod.points.map(pt => `
+                                <li class="p-3.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-700 leading-relaxed flex items-start gap-3">
+                                    <i class="fa-solid fa-check-circle text-indigo-500 mt-1 shrink-0"></i>
+                                    <span>${pt}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-orange-50 border border-orange-200 flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-orange-700 block">Contoh Nyata dalam Kehidupan Sehari-hari:</span>
+                            <p class="text-sm text-slate-800 font-medium mt-0.5">${mod.example}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Update tombol prev/next
+            document.getElementById('btn-prev-materi').disabled = appState.currentMateriIdx === 0;
+            const nextBtn = document.getElementById('btn-next-materi');
+            if (appState.currentMateriIdx === materiModules.length - 1) {
+                nextBtn.innerHTML = `Lanjut ke Media Interaktif <i class="fa-solid fa-arrow-right"></i>`;
+                nextBtn.onclick = () => navigateTo('media');
+            } else {
+                nextBtn.innerHTML = `Materi Berikutnya <i class="fa-solid fa-arrow-right"></i>`;
+                nextBtn.onclick = () => changeMateri(1);
+            }
+            document.getElementById('materi-page-indicator').textContent = `Bagian ${appState.currentMateriIdx + 1} dari ${materiModules.length}`;
+            updateProgress();
+        }
+
+        function selectMateri(idx) {
+            appState.currentMateriIdx = idx;
+            renderMateri();
+        }
+
+        function changeMateri(delta) {
+            const nextIdx = appState.currentMateriIdx + delta;
+            if (nextIdx >= 0 && nextIdx < materiModules.length) {
+                appState.currentMateriIdx = nextIdx;
+                renderMateri();
+            }
+        }
+
+        // ==================== 3. MEDIA INTERAKTIF ====================
+        const mediaComparisonData = [
+            {
+                title: "Kehidupan Masyarakat Tradisional vs Modern",
+                tag: "Struktur & Pola Hidup",
+                icon: "fa-city",
+                duluLabel: "Masyarakat Tradisional",
+                sekarangLabel: "Masyarakat Modern",
+                svg: `<svg viewBox="0 0 320 130" class="w-full h-36 rounded-xl bg-slate-100">
+                    <!-- Kiri: Tradisional -->
+                    <rect x="0" y="0" width="160" height="130" fill="#EFF6FF"/>
+                    <polygon points="45,65 80,38 115,65" fill="#92400E"/>
+                    <rect x="53" y="65" width="54" height="38" fill="#D97706"/>
+                    <rect x="73" y="80" width="14" height="23" fill="#78350F"/>
+                    <text x="80" y="120" text-anchor="middle" font-size="10" font-weight="bold" fill="#1E3A8A">Gotong Royong & Agraris</text>
+                    <!-- Kanan: Modern -->
+                    <rect x="160" y="0" width="160" height="130" fill="#F3E8FF"/>
+                    <rect x="190" y="30" width="32" height="73" rx="3" fill="#4F46E5"/>
+                    <rect x="230" y="45" width="36" height="58" rx="3" fill="#7C3AED"/>
+                    <rect x="272" y="22" width="26" height="81" rx="3" fill="#2563EB"/>
+                    <text x="240" y="120" text-anchor="middle" font-size="10" font-weight="bold" fill="#581C87">Industri & Spesialisasi</text>
+                </svg>`,
+                explanation: `
+                    <p><strong>Analisis Sosiologis:</strong></p>
+                    <p>Perubahan dari masyarakat tradisional ke modern mencerminkan konsep <em>Gemeinschaft</em> (paguyuban) menuju <em>Gesellschaft</em> (patembayan) menurut Ferdinand Tönnies.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+                        <li><strong>Masyarakat Tradisional:</strong> Ikatan kekeluargaan sangat kuat, homogen, berorientasi pada tradisi nenek moyang, dan sistem ekonomi agraris subsisten.</li>
+                        <li><strong>Masyarakat Modern:</strong> Pembagian kerja terspesialisasi (solidaritas organik menurut Émile Durkheim), berpikir rasional, terbuka terhadap inovasi, dan mobilitas sosial tinggi.</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Perkembangan Teknologi & Alat Kerja",
+                tag: "Inovasi & Efisiensi",
+                icon: "fa-microchip",
+                duluLabel: "Tenaga Manual / Mesin Ketik",
+                sekarangLabel: "Komputer & Kecerdasan Artifisial",
+                svg: `<svg viewBox="0 0 320 130" class="w-full h-36 rounded-xl bg-slate-100">
+                    <rect x="0" y="0" width="160" height="130" fill="#FEF3C7"/>
+                    <rect x="45" y="55" width="70" height="35" rx="5" fill="#78350F"/>
+                    <rect x="55" y="38" width="50" height="20" fill="#FFF" stroke="#78350F" stroke-width="2"/>
+                    <text x="80" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400E">Mesin Ketik Manual</text>
+                    <rect x="160" y="0" width="160" height="130" fill="#E0E7FF"/>
+                    <rect x="200" y="35" width="80" height="48" rx="6" fill="#1E293B"/>
+                    <rect x="205" y="40" width="70" height="36" fill="#38BDF8"/>
+                    <polygon points="190,88 290,88 282,83 198,83" fill="#64748B"/>
+                    <text x="240" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#3730A3">Laptop & Cloud AI</text>
+                </svg>`,
+                explanation: `
+                    <p><strong>Analisis Sosiologis:</strong></p>
+                    <p>Perkembangan teknologi merupakan contoh nyata <em>discovery</em> dan <em>invention</em> yang memicu perubahan besar (revolusi industri).</p>
+                    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+                        <li><strong>Dulu:</strong> Pekerjaan administratif membutuhkan waktu lama, arsip berbentuk fisik, dan jangkauan distribusi informasi terbatas.</li>
+                        <li><strong>Sekarang:</strong> Otomatisasi digital dan kecerdasan artifisial meningkatkan efisiensi kerja secara drastis, namun menuntut masyarakat terus meningkatkan keterampilan (<em>upskilling</em>) agar tidak terpinggirkan.</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Perubahan Pola Komunikasi Masyarakat",
+                tag: "Interaksi Sosial",
+                icon: "fa-comments",
+                duluLabel: "Surat Pos & Telepon Umum",
+                sekarangLabel: "Media Sosial & Video Call",
+                svg: `<svg viewBox="0 0 320 130" class="w-full h-36 rounded-xl bg-slate-100">
+                    <rect x="0" y="0" width="160" height="130" fill="#DBEAFE"/>
+                    <rect x="45" y="42" width="70" height="46" rx="4" fill="#FFF" stroke="#2563EB" stroke-width="2"/>
+                    <polyline points="45,42 80,68 115,42" fill="none" stroke="#2563EB" stroke-width="2"/>
+                    <text x="80" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#1E40AF">Surat Fisik (Berhari-hari)</text>
+                    <rect x="160" y="0" width="160" height="130" fill="#FCE7F3"/>
+                    <rect x="218" y="28" width="44" height="72" rx="8" fill="#1E293B"/>
+                    <rect x="222" y="34" width="36" height="56" fill="#A855F7"/>
+                    <circle cx="240" cy="54" r="9" fill="#FDE047"/>
+                    <text x="240" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#86198F">Pesan Instan Real-Time</text>
+                </svg>`,
+                explanation: `
+                    <p><strong>Analisis Sosiologis:</strong></p>
+                    <p>Syarat terjadinya interaksi sosial adalah kontak sosial dan komunikasi. Teknologi digital mengubah bentuk kontak sosial dari primer langsung menjadi sekunder tidak langsung berbasis layar.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+                        <li><strong>Dulu:</strong> Komunikasi jarak jauh memerlukan waktu berhari-hari melalui surat atau biaya mahal melalui telepon kabel/wartel.</li>
+                        <li><strong>Sekarang:</strong> Jarak geografis seolah menghilang (<em>global village</em>). Namun, muncul tantangan baru berupa berkurangnya keakraban tatap muka di ruang keluarga (<em>phubbing</em>).</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Sistem Perdagangan: Pasar Tradisional ke Belanja Online",
+                tag: "Lembaga Ekonomi",
+                icon: "fa-cart-shopping",
+                duluLabel: "Tawar-Menawar Tatap Muka",
+                sekarangLabel: "E-Commerce & Pembayaran Digital",
+                svg: `<svg viewBox="0 0 320 130" class="w-full h-36 rounded-xl bg-slate-100">
+                    <rect x="0" y="0" width="160" height="130" fill="#ECFDF5"/>
+                    <polygon points="35,50 125,50 115,35 45,35" fill="#059669"/>
+                    <rect x="45" y="50" width="70" height="45" fill="#A7F3D0"/>
+                    <text x="80" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#065F46">Pasar Fisik & Tunai</text>
+                    <rect x="160" y="0" width="160" height="130" fill="#FFF7ED"/>
+                    <rect x="205" y="35" width="70" height="52" rx="8" fill="#F97316"/>
+                    <circle cx="225" cy="95" r="6" fill="#1E293B"/>
+                    <circle cx="255" cy="95" r="6" fill="#1E293B"/>
+                    <text x="240" y="65" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">E-SHOP</text>
+                    <text x="240" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#9A3412">Marketplace & QRIS</text>
+                </svg>`,
+                explanation: `
+                    <p><strong>Analisis Sosiologis:</strong></p>
+                    <p>Perubahan sistem perdagangan memengaruhi pola konsumsi masyarakat serta hubungan sosial antara penjual dan pembeli.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+                        <li><strong>Pasar Tradisional:</strong> Terjadi interaksi sosial personal, proses tawar-menawar yang membangun keakraban, dan pembayaran tunai.</li>
+                        <li><strong>Belanja Online:</strong> Transaksi sangat praktis, pilihan produk global, dan harga transparan, namun berpotensi mendorong perilaku konsumtif serta menuntut pedagang tradisional beradaptasi secara digital.</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Transportasi Konvensional ke Transportasi Online",
+                tag: "Mobilitas & Jasa",
+                icon: "fa-motorcycle",
+                duluLabel: "Ojek Pangkalan & Angkot",
+                sekarangLabel: "Aplikasi Ride-Hailing Terintegrasi",
+                svg: `<svg viewBox="0 0 320 130" class="w-full h-36 rounded-xl bg-slate-100">
+                    <rect x="0" y="0" width="160" height="130" fill="#F1F5F9"/>
+                    <rect x="42" y="45" width="76" height="40" rx="8" fill="#0284C7"/>
+                    <circle cx="58" cy="88" r="9" fill="#1E293B"/>
+                    <circle cx="102" cy="88" r="9" fill="#1E293B"/>
+                    <text x="80" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#0369A1">Menunggu di Pangkalan</text>
+                    <rect x="160" y="0" width="160" height="130" fill="#EEF2FF"/>
+                    <circle cx="240" cy="58" r="24" fill="#10B981"/>
+                    <path d="M240 44 C233 44, 228 49, 228 56 C228 65, 240 74, 240 74 C240 74, 252 65, 252 56 C252 49, 247 44, 240 44 Z" fill="#FFF"/>
+                    <circle cx="240" cy="55" r="4" fill="#10B981"/>
+                    <text x="240" y="115" text-anchor="middle" font-size="10" font-weight="bold" fill="#3730A3">Pesan Via GPS Smartphone</text>
+                </svg>`,
+                explanation: `
+                    <p><strong>Analisis Sosiologis:</strong></p>
+                    <p>Kehadiran transportasi berbasis aplikasi (<em>sharing economy</em>) merupakan contoh inovasi teknologi yang mengubah struktur pekerjaan di sektor jasa.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+                        <li><strong>Dulu:</strong> Penumpang harus mendatangi pangkalan/halte, tarif dinegosiasikan secara manual, dan ketidakpastian waktu tunggu.</li>
+                        <li><strong>Sekarang:</strong> Penjemputan berbasis GPS di depan rumah, tarif terukur otomatis, serta multifungsi (pesan makanan & kirim barang), meski sempat memicu konflik sosial dengan transportasi konvensional sebelum tercapai akomodasi.</li>
+                    </ul>
+                `
+            }
+        ];
+
+        function renderMediaInteraktif() {
+            const grid = document.getElementById('media-grid');
+            grid.innerHTML = mediaComparisonData.map((item, idx) => `
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">${item.tag}</span>
+                            ${appState.mediaViewed[idx] ? '<span class="text-xs font-bold text-emerald-600"><i class="fa-solid fa-circle-check"></i> Sudah Dibaca</span>' : ''}
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-base sm:text-lg mb-3">${item.title}</h3>
+                        ${item.svg}
+                        <div class="grid grid-cols-2 gap-2 mt-3 text-center text-xs">
+                            <div class="bg-white p-2 rounded-lg border border-slate-200 font-semibold text-slate-600">
+                                <span class="block text-[10px] text-slate-400 uppercase">Dulu</span>
+                                ${item.duluLabel}
+                            </div>
+                            <div class="bg-white p-2 rounded-lg border border-indigo-200 font-semibold text-indigo-700">
+                                <span class="block text-[10px] text-indigo-400 uppercase">Sekarang</span>
+                                ${item.sekarangLabel}
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openMediaDetail(${idx})" class="mt-4 w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-eye"></i> Lihat Penjelasan Sosiologis
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function openMediaDetail(idx) {
+            const item = mediaComparisonData[idx];
+            appState.mediaViewed[idx] = true;
+            document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${item.icon}"></i>`;
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-body').innerHTML = `
+                ${item.svg}
+                <div class="mt-3 text-sm sm:text-base">${item.explanation}</div>
+            `;
+            document.getElementById('detail-modal').classList.remove('hidden');
+            renderMediaInteraktif();
+            updateProgress();
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        // ==================== 4. GAME EDUKASI (3 PERMAINAN) ====================
+        let activeGame = 1;
+
+        // Data Game 1: Tebak Konsep (8 Soal)
+        const game1Questions = [
+            { desc: "Perubahan sosial yang berlangsung sangat lambat dalam rentang waktu lama tanpa kehendak tertentu dari masyarakat, misalnya perubahan masyarakat berburu menjadi agraris.", options: ["Revolusi", "Evolusi", "Akulturasi", "Regres"], answer: "Evolusi" },
+            { desc: "Perubahan sosial yang berlangsung cepat dan menyangkut sendi-sendi pokok kehidupan masyarakat, contohnya Revolusi Industri di Inggris.", options: ["Evolusi", "Difusi", "Revolusi", "Asimilasi"], answer: "Revolusi" },
+            { desc: "Proses penyebaran unsur-unsur kebudayaan dari satu individu atau kelompok masyarakat ke masyarakat lainnya.", options: ["Difusi", "Konflik Sosial", "Vested Interest", "Culture Lag"], answer: "Difusi" },
+            { desc: "Perpaduan dua kebudayaan atau lebih yang menghasilkan kebudayaan baru tanpa menghilangkan ciri khas kebudayaan aslinya (contoh: Masjid Menara Kudus).", options: ["Asimilasi", "Akulturasi", "Invention", "Disorganisasi"], answer: "Akulturasi" },
+            { desc: "Bentuk perubahan sosial yang membawa kemunduran atau kerugian bagi kehidupan masyarakat, seperti penyalahgunaan narkotika dan kerusakan lingkungan.", options: ["Progres", "Planned Change", "Regres", "Modernisasi"], answer: "Regres" },
+            { desc: "Kondisi ketertinggalan budaya ketika pertumbuhan unsur kebendaan (teknologi) jauh lebih cepat dibandingkan kesiapan mental dan norma masyarakat.", options: ["Culture Shock", "Culture Lag", "Discovery", "Solidaritas"], answer: "Culture Lag" },
+            { desc: "Perasaan kaget, cemas, atau terkejut yang dialami seseorang ketika berhadapan dengan lingkungan dan budaya baru yang berbeda dari kebiasaan asalnya.", options: ["Culture Shock", "Culture Lag", "Asimilasi", "Evolusi"], answer: "Culture Shock" },
+            { desc: "Kepentingan-kepentingan yang sudah tertanam kuat pada sekelompok orang sehingga mereka menolak perubahan demi mempertahankan status dan keuntungannya.", options: ["Vested Interest", "Agen Perubahan", "Invention", "Mobilitas Sosial"], answer: "Vested Interest" }
+        ];
+        let g1State = { idx: 0, score: 0, answered: false, finished: false };
+
+        // Data Game 2: Benar atau Salah (10 Pernyataan)
+        const game2Statements = [
+            { stmt: "Setiap masyarakat di dunia pasti mengalami perubahan sosial, meskipun kecepatannya berbeda-beda.", ans: true, exp: "Benar! Tidak ada masyarakat yang benar-benar statis; masyarakat tradisional pun tetap berubah secara lambat (evolusi)." },
+            { stmt: "Perubahan tren model potongan rambut dan gaya berpakaian remaja termasuk contoh perubahan sosial besar.", ans: false, exp: "Salah! Perubahan tren mode/rambut termasuk perubahan kecil karena tidak memengaruhi struktur lembaga kemasyarakatan." },
+            { stmt: "Bencana alam seperti gempa bumi atau banjir bandang yang mengubah mata pencaharian warga merupakan faktor penyebab eksternal.", ans: true, exp: "Benar! Perubahan lingkungan fisik/alam berasal dari luar sistem internal masyarakat sehingga dikategorikan faktor eksternal." },
+            { stmt: "Teori Siklus berpandangan bahwa perubahan sosial bergerak lurus satu arah menuju masyarakat modern tanpa pernah kembali.", ans: false, exp: "Salah! Pernyataan tersebut adalah ciri Teori Evolusi Linear. Teori Siklus memandang perubahan berputar seperti roda (lahir, jaya, mundur, berulang)." },
+            { stmt: "Pembangunan jalan tol dan program keluarga berencana (KB) oleh pemerintah adalah contoh perubahan yang direncanakan (planned change).", ans: true, exp: "Benar! Perubahan tersebut dirancang sebelumnya oleh pihak-pihak yang menghendaki perubahan (agent of change)." },
+            { stmt: "Sikap masyarakat yang sangat mengagungkan tradisi lama dan menutup diri dari dunia luar merupakan faktor pendorong perubahan sosial.", ans: false, exp: "Salah! Sikap tertutup dan terlalu mengagungkan tradisi justru menjadi faktor penghambat perubahan sosial." },
+            { stmt: "Peleburan dua kebudayaan berbeda sehingga membentuk kebudayaan baru dan menghilangkan ciri budaya lama disebut asimilasi.", ans: true, exp: "Benar! Berbeda dengan akulturasi yang mempertahankan ciri asli, asimilasi meleburkan budaya lama menjadi budaya baru." },
+            { stmt: "Penggunaan aplikasi pembayaran digital QRIS di warung-warung kecil menunjukkan dampak positif kemajuan teknologi dalam lembaga ekonomi.", ans: true, exp: "Benar! Teknologi mempermudah transaksi ekonomi menjadi lebih cepat, tercatat, dan efisien." },
+            { stmt: "Pertambahan dan pengurangan jumlah penduduk di suatu daerah termasuk faktor eksternal perubahan sosial.", ans: false, exp: "Salah! Dinamika demografi (pertambahan/pengurangan penduduk) berasal dari dalam masyarakat sendiri sehingga termasuk faktor internal." },
+            { stmt: "Membuang sampah sembarangan di sungai meskipun sudah tersedia tempat sampah modern adalah contoh gejala culture lag.", ans: true, exp: "Benar! Fasilitas fisik sudah modern, tetapi perilaku dan kesadaran norma kebersihan tertinggal di belakang." }
+        ];
+        let g2State = { idx: 0, score: 0, answered: false, finished: false };
+
+        // Data Game 3: Detektif Perubahan Sosial (5 Kasus)
+        const game3Cases = [
+            {
+                caseText: "Kasus 1: Pemerintah membangun jaringan internet cepat dan membagikan tablet pembelajaran ke sekolah-sekolah di daerah tertinggal untuk meningkatkan mutu pendidikan.",
+                bentuk: "Direncanakan & Progres",
+                faktor: "Penemuan Baru (Teknologi)",
+                dampak: "Akses belajar makin luas & merata",
+                optBentuk: ["Direncanakan & Progres", "Tidak Direncanakan & Regres", "Evolusi & Kecil"],
+                optFaktor: ["Penemuan Baru (Teknologi)", "Peperangan", "Bencana Alam"],
+                optDampak: ["Akses belajar makin luas & merata", "Kemunduran literasi siswa", "Hilangnya lembaga sekolah"]
+            },
+            {
+                caseText: "Kasus 2: Banjir bandang melanda sebuah desa pertanian sehingga lahan sawah tertimbun lumpur dan warga terpaksa beralih profesi menjadi buruh bangunan di kota.",
+                bentuk: "Tidak Direncanakan & Besar",
+                faktor: "Perubahan Lingkungan Alam",
+                dampak: "Pergeseran mata pencaharian & urbanisasi",
+                optBentuk: ["Tidak Direncanakan & Besar", "Direncanakan & Kecil", "Evolusi & Progres"],
+                optFaktor: ["Perubahan Lingkungan Alam", "Difusi Budaya", "Konflik Ideologi"],
+                optDampak: ["Pergeseran mata pencaharian & urbanisasi", "Hasil panen meningkat pesat", "Tidak ada perubahan struktur"]
+            },
+            {
+                caseText: "Kasus 3: Remaja di kota besar ramai-ramai meniru gaya busana, bahasa gaul, dan tarian dari grup musik Korea Selatan yang mereka tonton di platform video global.",
+                bentuk: "Perubahan Kecil (Gaya Hidup)",
+                faktor: "Pengaruh Kebudayaan Lain (Difusi)",
+                dampak: "Munculnya tren budaya populer baru",
+                optBentuk: ["Perubahan Kecil (Gaya Hidup)", "Revolusi Politik", "Perubahan Regresif Ekstrem"],
+                optFaktor: ["Pengaruh Kebudayaan Lain (Difusi)", "Pengurangan Penduduk", "Bencana Geografis"],
+                optDampak: ["Munculnya tren budaya populer baru", "Perubahan sistem pemerintahan", "Hilangnya bahasa daerah total"]
+            },
+            {
+                caseText: "Kasus 4: Munculnya kecerdasan artifisial (AI) generatif membuat beberapa pekerjaan administratif rutin digantikan perangkat lunak dalam waktu singkat.",
+                bentuk: "Perubahan Cepat (Revolusi Digital)",
+                faktor: "Invention (Inovasi Teknologi)",
+                dampak: "Efisiensi kerja namun muncul kebutuhan skill baru",
+                optBentuk: ["Perubahan Cepat (Revolusi Digital)", "Perubahan Lambat (Evolusi)", "Perubahan Kecil"],
+                optFaktor: ["Invention (Inovasi Teknologi)", "Pertambahan Penduduk", "Peperangan Antarnegara"],
+                optDampak: ["Efisiensi kerja namun muncul kebutuhan skill baru", "Semua manusia berhenti bekerja", "Teknologi kembali ke masa lalu"]
+            },
+            {
+                caseText: "Kasus 5: Sebagian pemuda desa menyalahgunakan kebebasan media sosial untuk menyebarkan berita bohong (hoaks) hingga memicu perpecahan antarwarga.",
+                bentuk: "Perubahan Regres (Kemunduran)",
+                faktor: "Kurangnya Literasi Digital",
+                dampak: "Disorganisasi sosial & melemahnya solidaritas",
+                optBentuk: ["Perubahan Regres (Kemunduran)", "Perubahan Progres", "Perubahan Direncanakan"],
+                optFaktor: ["Kurangnya Literasi Digital", "Perubahan Iklim", "Sistem Pendidikan Maju"],
+                optDampak: ["Disorganisasi sosial & melemahnya solidaritas", "Meningkatnya kerukunan warga", "Terciptanya integrasi nasional"]
+            }
+        ];
+        let g3State = { idx: 0, score: 0, submitted: false, finished: false };
+
+        function switchGame(num) {
+            activeGame = num;
+            [1, 2, 3].forEach(n => {
+                const tab = document.getElementById(`tab-game-${n}`);
+                if (n === num) {
+                    tab.className = "p-4 rounded-2xl border-2 border-indigo-600 bg-indigo-50 text-left transition";
+                } else {
+                    tab.className = "p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-300 text-left transition";
+                }
+            });
+            renderActiveGame();
+        }
+
+        function renderActiveGame() {
+            const arena = document.getElementById('game-arena');
+            if (activeGame === 1) renderGame1(arena);
+            else if (activeGame === 2) renderGame2(arena);
+            else renderGame3(arena);
+        }
+
+        // --- Render Game 1: Tebak Konsep ---
+        function renderGame1(arena) {
+            if (g1State.finished) {
+                const finalPct = Math.round((g1State.score / game1Questions.length) * 100);
+                appState.game1Score = finalPct;
+                document.getElementById('badge-score-g1').textContent = `Skor: ${finalPct}`;
+                updateProgress();
+                arena.innerHTML = `
+                    <div class="text-center py-6 space-y-4 fade-in">
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-600 text-white mx-auto flex items-center justify-center text-3xl shadow-lg">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-extrabold text-slate-800">Game 1 Selesai!</h3>
+                        <p class="text-4xl font-extrabold text-indigo-600">${finalPct} / 100</p>
+                        <p class="text-sm text-slate-600 max-w-md mx-auto">${finalPct >= 75 ? 'Luar biasa! Penguasaan konsep dasar perubahan sosialmu sangat kuat!' : 'Bagus! Ayo baca kembali materi subbab B & C lalu coba lagi untuk skor sempurna!'}</p>
+                        <button onclick="resetGame1()" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Main Ulang Game 1
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = game1Questions[g1State.idx];
+            arena.innerHTML = `
+                <div class="space-y-4 fade-in">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span>GAME 1: TEBAK KONSEP • Soal ${g1State.idx + 1} dari ${game1Questions.length}</span>
+                        <span class="text-indigo-600">Benar: ${g1State.score}</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200">
+                        <p class="text-xs uppercase font-bold text-indigo-600 mb-1">Deskripsi Fenomena:</p>
+                        <p class="text-base sm:text-lg font-semibold text-slate-800">"${q.desc}"</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="g1-options">
+                        ${q.options.map(opt => `
+                            <button onclick="answerGame1('${opt}')" class="g1-opt-btn p-4 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-500 font-bold text-slate-700 text-left transition">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="g1-feedback" class="hidden p-4 rounded-xl text-sm font-semibold"></div>
+                </div>
+            `;
+        }
+
+        function answerGame1(selected) {
+            if (g1State.answered) return;
+            g1State.answered = true;
+            const q = game1Questions[g1State.idx];
+            const isCorrect = selected === q.answer;
+            if (isCorrect) g1State.score++;
+
+            document.querySelectorAll('.g1-opt-btn').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent.trim() === q.answer) {
+                    btn.classList.replace('border-slate-200', 'border-emerald-500');
+                    btn.classList.add('bg-emerald-50', 'text-emerald-800');
+                } else if (btn.textContent.trim() === selected && !isCorrect) {
+                    btn.classList.replace('border-slate-200', 'border-rose-500');
+                    btn.classList.add('bg-rose-50', 'text-rose-800');
+                }
+            });
+
+            const fb = document.getElementById('g1-feedback');
+            fb.classList.remove('hidden');
+            fb.className = `p-4 rounded-xl text-sm font-semibold flex flex-wrap items-center justify-between gap-3 ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
+            fb.innerHTML = `
+                <span>${isCorrect ? 'Tepat sekali! Istilah yang dimaksud adalah ' + q.answer + '.' : 'Kurang tepat. Jawaban yang benar adalah: ' + q.answer + '.'}</span>
+                <button onclick="nextGame1()" class="px-4 py-2 rounded-lg bg-slate-800 text-white text-xs font-bold hover:bg-slate-900">
+                    ${g1State.idx + 1 < game1Questions.length ? 'Soal Berikutnya →' : 'Lihat Skor Akhir'}
+                </button>
+            `;
+        }
+
+        function nextGame1() {
+            if (g1State.idx + 1 < game1Questions.length) {
+                g1State.idx++;
+                g1State.answered = false;
+            } else {
+                g1State.finished = true;
+            }
+            renderActiveGame();
+        }
+
+        function resetGame1() {
+            g1State = { idx: 0, score: 0, answered: false, finished: false };
+            renderActiveGame();
+        }
+
+        // --- Render Game 2: Benar atau Salah ---
+        function renderGame2(arena) {
+            if (g2State.finished) {
+                const finalPct = Math.round((g2State.score / game2Statements.length) * 100);
+                appState.game2Score = finalPct;
+                document.getElementById('badge-score-g2').textContent = `Skor: ${finalPct}`;
+                document.getElementById('badge-score-g2').classList.replace('bg-slate-200', 'bg-purple-600');
+                document.getElementById('badge-score-g2').classList.replace('text-slate-700', 'text-white');
+                updateProgress();
+                arena.innerHTML = `
+                    <div class="text-center py-6 space-y-4 fade-in">
+                        <div class="w-16 h-16 rounded-2xl bg-purple-600 text-white mx-auto flex items-center justify-center text-3xl shadow-lg">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-extrabold text-slate-800">Game 2 Selesai!</h3>
+                        <p class="text-4xl font-extrabold text-purple-600">${finalPct} / 100</p>
+                        <p class="text-sm text-slate-600 max-w-md mx-auto">${finalPct >= 75 ? 'Hebat! Ketelitian analisis sosiologismu sangat baik!' : 'Terus berlatih membedakan konsep internal-eksternal dan bentuk perubahan ya!'}</p>
+                        <button onclick="resetGame2()" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Main Ulang Game 2
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const s = game2Statements[g2State.idx];
+            arena.innerHTML = `
+                <div class="space-y-4 fade-in">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span>GAME 2: BENAR ATAU SALAH • Pernyataan ${g2State.idx + 1} dari ${game2Statements.length}</span>
+                        <span class="text-purple-600">Benar: ${g2State.score}</span>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center">
+                        <p class="text-base sm:text-lg font-bold text-slate-800">"${s.stmt}"</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="answerGame2(true)" id="btn-g2-true" class="p-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-base shadow-sm transition">
+                            <i class="fa-solid fa-check mr-2"></i> BENAR
+                        </button>
+                        <button onclick="answerGame2(false)" id="btn-g2-false" class="p-4 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-base shadow-sm transition">
+                            <i class="fa-solid fa-xmark mr-2"></i> SALAH
+                        </button>
+                    </div>
+                    <div id="g2-feedback" class="hidden p-4 rounded-xl text-sm"></div>
+                </div>
+            `;
+        }
+
+        function answerGame2(userChoice) {
+            if (g2State.answered) return;
+            g2State.answered = true;
+            const s = game2Statements[g2State.idx];
+            const isCorrect = userChoice === s.ans;
+            if (isCorrect) g2State.score++;
+
+            document.getElementById('btn-g2-true').disabled = true;
+            document.getElementById('btn-g2-false').disabled = true;
+
+            const fb = document.getElementById('g2-feedback');
+            fb.classList.remove('hidden');
+            fb.className = `p-4 rounded-xl text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${isCorrect ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-rose-100 text-rose-900 border border-rose-300'}`;
+            fb.innerHTML = `
+                <div>
+                    <p class="font-extrabold">${isCorrect ? 'Jawabanmu Tepat!' : 'Kurang Tepat!'}</p>
+                    <p class="mt-0.5">${s.exp}</p>
+                </div>
+                <button onclick="nextGame2()" class="px-4 py-2 rounded-lg bg-slate-800 text-white text-xs font-bold shrink-0 self-start sm:self-center">
+                    ${g2State.idx + 1 < game2Statements.length ? 'Lanjut →' : 'Skor Akhir'}
+                </button>
+            `;
+        }
+
+        function nextGame2() {
+            if (g2State.idx + 1 < game2Statements.length) {
+                g2State.idx++;
+                g2State.answered = false;
+            } else {
+                g2State.finished = true;
+            }
+            renderActiveGame();
+        }
+
+        function resetGame2() {
+            g2State = { idx: 0, score: 0, answered: false, finished: false };
+            renderActiveGame();
+        }
+
+        // --- Render Game 3: Detektif Perubahan Sosial ---
+        function renderGame3(arena) {
+            if (g3State.finished) {
+                const finalPct = Math.round((g3State.score / (game3Cases.length * 3)) * 100);
+                appState.game3Score = finalPct;
+                document.getElementById('badge-score-g3').textContent = `Skor: ${finalPct}`;
+                document.getElementById('badge-score-g3').classList.replace('bg-slate-200', 'bg-orange-500');
+                document.getElementById('badge-score-g3').classList.replace('text-slate-700', 'text-white');
+                updateProgress();
+                arena.innerHTML = `
+                    <div class="text-center py-6 space-y-4 fade-in">
+                        <div class="w-16 h-16 rounded-2xl bg-orange-500 text-white mx-auto flex items-center justify-center text-3xl shadow-lg">
+                            <i class="fa-solid fa-user-secret"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-extrabold text-slate-800">Misi Detektif Selesai!</h3>
+                        <p class="text-4xl font-extrabold text-orange-600">${finalPct} / 100</p>
+                        <p class="text-sm text-slate-600 max-w-md mx-auto">Kamu berhasil membedah 5 kasus sosial dari sisi bentuk, faktor penyebab, dan dampaknya!</p>
+                        <button onclick="resetGame3()" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Ulangi Misi Detektif
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const c = game3Cases[g3State.idx];
+            arena.innerHTML = `
+                <div class="space-y-4 fade-in">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span>GAME 3: DETEKTIF SOSIAL • Kasus ${g3State.idx + 1} dari ${game3Cases.length}</span>
+                        <span class="text-orange-600">Poin Terkumpul: ${g3State.score} / 15</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-orange-500 shadow-xs">
+                        <p class="text-sm sm:text-base font-bold text-slate-800">${c.caseText}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-extrabold uppercase text-indigo-600 mb-2">1. Jenis / Bentuk Perubahan</label>
+                            <select id="g3-sel-bentuk" class="w-full p-2.5 rounded-lg border border-slate-300 text-sm font-medium bg-slate-50">
+                                <option value="">-- Pilih Bentuk --</option>
+                                ${c.optBentuk.map(o => `<option value="${o}">${o}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-extrabold uppercase text-purple-600 mb-2">2. Faktor Penyebab Utama</label>
+                            <select id="g3-sel-faktor" class="w-full p-2.5 rounded-lg border border-slate-300 text-sm font-medium bg-slate-50">
+                                <option value="">-- Pilih Faktor --</option>
+                                ${c.optFaktor.map(o => `<option value="${o}">${o}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-extrabold uppercase text-orange-600 mb-2">3. Dampak Sosial</label>
+                            <select id="g3-sel-dampak" class="w-full p-2.5 rounded-lg border border-slate-300 text-sm font-medium bg-slate-50">
+                                <option value="">-- Pilih Dampak --</option>
+                                ${c.optDampak.map(o => `<option value="${o}">${o}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <div id="g3-action-area" class="flex justify-end">
+                        <button onclick="checkGame3()" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm transition">
+                            Periksa Analisis Kasus
+                        </button>
+                    </div>
+                    <div id="g3-feedback" class="hidden p-4 rounded-xl text-sm"></div>
+                </div>
+            `;
+        }
+
+        function checkGame3() {
+            if (g3State.submitted) return;
+            const vBentuk = document.getElementById('g3-sel-bentuk').value;
+            const vFaktor = document.getElementById('g3-sel-faktor').value;
+            const vDampak = document.getElementById('g3-sel-dampak').value;
+
+            if (!vBentuk || !vFaktor || !vDampak) {
+                showToast('Lengkapi ketiga pilihan analisis terlebih dahulu!', 'error');
+                return;
+            }
+
+            g3State.submitted = true;
+            const c = game3Cases[g3State.idx];
+            let earned = 0;
+            if (vBentuk === c.bentuk) earned++;
+            if (vFaktor === c.faktor) earned++;
+            if (vDampak === c.dampak) earned++;
+            g3State.score += earned;
+
+            document.getElementById('g3-action-area').classList.add('hidden');
+            const fb = document.getElementById('g3-feedback');
+            fb.classList.remove('hidden');
+            fb.className = `p-4 rounded-xl text-sm space-y-2 ${earned === 3 ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900'}`;
+            fb.innerHTML = `
+                <p class="font-extrabold">Hasil Analisis: Benar ${earned} dari 3 aspek!</p>
+                <ul class="text-xs space-y-1">
+                    <li>• <strong>Bentuk:</strong> ${c.bentuk}</li>
+                    <li>• <strong>Faktor:</strong> ${c.faktor}</li>
+                    <li>• <strong>Dampak:</strong> ${c.dampak}</li>
+                </ul>
+                <div class="pt-2">
+                    <button onclick="nextGame3()" class="px-4 py-2 rounded-lg bg-slate-800 text-white text-xs font-bold">
+                        ${g3State.idx + 1 < game3Cases.length ? 'Kasus Berikutnya →' : 'Lihat Skor Akhir'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function nextGame3() {
+            if (g3State.idx + 1 < game3Cases.length) {
+                g3State.idx++;
+                g3State.submitted = false;
+            } else {
+                g3State.finished = true;
+            }
+            renderActiveGame();
+        }
+
+        function resetGame3() {
+            g3State = { idx: 0, score: 0, submitted: false, finished: false };
+            renderActiveGame();
+        }
+
+        // ==================== 5. KUIS INTERAKTIF (15 SOAL HOTS) ====================
+        const quizQuestions = [
+            {
+                q: "1. Menurut Selo Soemardjan, perubahan sosial adalah segala perubahan pada lembaga-lembaga kemasyarakatan di dalam suatu masyarakat yang memengaruhi sistem sosialnya, termasuk di dalamnya...",
+                opts: ["Kondisi iklim dan letak geografis wilayah", "Nilai-nilai, sikap, dan pola perilaku di antara kelompok-kelompok", "Jumlah kekayaan alam yang dimiliki suatu negara", "Bentuk fisik bangunan perkotaan semata"],
+                ans: 1,
+                exp: "Selo Soemardjan menekankan bahwa perubahan lembaga kemasyarakatan memengaruhi sistem sosial, yaitu nilai, sikap, dan pola perilaku antar kelompok."
+            },
+            {
+                q: "2. Penggunaan traktor dan mesin pemanen padi menggantikan kerbau dan tenaga manusia secara bertahap di pedesaan merupakan contoh perubahan sosial berdasarkan kecepatannya, yaitu...",
+                opts: ["Revolusi", "Evolusi", "Regres", "Disorganisasi"],
+                ans: 1,
+                exp: "Perubahan bertahap dalam jangka waktu relatif lama tanpa gejolak besar disebut evolusi."
+            },
+            {
+                q: "3. Perubahan gaya potongan rambut 'mullet' atau tren warna pakaian setiap tahun di kalangan pelajar SMA digolongkan sebagai perubahan kecil karena...",
+                opts: ["Hanya diikuti oleh masyarakat pedesaan", "Tidak membawa pengaruh langsung terhadap struktur lembaga masyarakat", "Direncanakan oleh pemerintah pusat", "Menimbulkan konflik antargenerasi secara luas"],
+                ans: 1,
+                exp: "Perubahan kecil terjadi pada unsur budaya yang tidak memengaruhi struktur sosial dan lembaga dasar masyarakat."
+            },
+            {
+                q: "4. Pemerintah mencanangkan program transmigrasi dan pembangunan Ibu Kota Nusantara (IKN) untuk pemerataan pembangunan. Dilihat dari perencanaannya, fenomena ini termasuk...",
+                opts: ["Unplanned change (tidak direncanakan)", "Planned change (direncanakan)", "Perubahan regresif", "Perubahan siklus alamiah"],
+                ans: 1,
+                exp: "Program pembangunan negara dirancang secara sadar oleh agen perubahan (agent of change), sehingga disebut planned change."
+            },
+            {
+                q: "5. Pandemi global beberapa tahun lalu memaksa seluruh sekolah beralih ke pembelajaran jarak jauh secara mendadak dan mengubah pola pengawasan orang tua. Hal ini menunjukkan ciri perubahan sosial berupa...",
+                opts: ["Masyarakat selalu statis", "Perubahan pada satu aspek diikuti perubahan pada lembaga sosial lainnya", "Perubahan hanya terjadi pada bidang materiil", "Perubahan sosial selalu direncanakan"],
+                ans: 1,
+                exp: "Perubahan sosial bersifat mata rantai; perubahan di bidang kesehatan berdampak pada lembaga pendidikan, ekonomi, dan keluarga."
+            },
+            {
+                q: "6. Penemuan teknologi kecerdasan artifisial (AI) yang kemudian dikembangkan menjadi berbagai aplikasi asisten belajar siswa merupakan faktor penyebab perubahan internal dalam bentuk...",
+                opts: ["Peperangan", "Discovery dan Invention", "Perubahan lingkungan alam", "Akulturasi budaya"],
+                ans: 1,
+                exp: "Penemuan unsur baru (discovery) yang dikembangkan dan diterapkan dalam masyarakat (invention) merupakan faktor internal perubahan sosial."
+            },
+            {
+                q: "7. Warga di daerah pesisir pantai yang mengalami abrasi parah terpaksa mengubah mata pencaharian dari nelayan tradisional menjadi pengelola wisata mangrove. Faktor penyebab perubahan tersebut adalah...",
+                opts: ["Konflik sosial internal", "Perubahan lingkungan fisik/alam", "Pemberontakan sosial", "Pertambahan penduduk kota"],
+                ans: 1,
+                exp: "Abrasi pantai adalah perubahan kondisi lingkungan alam (faktor eksternal) yang memaksa masyarakat beradaptasi secara ekonomi."
+            },
+            {
+                q: "8. Di sebuah desa terpencil, masyarakat menolak pembangunan menara pemancar internet karena khawatir tradisi adat mereka akan luntur dan mengancam kedudukan tetua adat. Faktor penghambat perubahan pada kasus ini adalah...",
+                opts: ["Sistem pendidikan yang maju", "Rasa takut akan kegoyahan integrasi kebudayaan dan vested interest", "Penduduk yang sangat heterogen", "Orientasi hidup ke masa depan"],
+                ans: 1,
+                exp: "Ketakutan akan hilangnya integrasi budaya asli serta kepentingan tertanam (vested interest) membuat masyarakat menolak inovasi."
+            },
+            {
+                q: "9. Tren busana 'retro' tahun 1980-an seperti celana cutbray dan kaset pita kembali digemari oleh generasi Z saat ini. Fenomena ini paling tepat dijelaskan menggunakan...",
+                opts: ["Teori Evolusi Linear", "Teori Konflik Kelas", "Teori Siklus", "Teori Fungsional Struktural"],
+                ans: 2,
+                exp: "Teori Siklus memandang perubahan sosial seperti roda berputar di mana tren atau fase masa lalu dapat berulang kembali."
+            },
+            {
+                q: "10. Karl Marx memandang bahwa perubahan besar dalam struktur masyarakat terjadi akibat adanya pertentangan antara kelas pemilik modal (borjuis) dan kelas pekerja (proletar). Pandangan ini merupakan inti dari...",
+                opts: ["Teori Siklus", "Teori Evolusi", "Teori Konflik", "Teori Keseimbangan"],
+                ans: 2,
+                exp: "Teori Konflik menekankan bahwa ketegangan dan pertentangan kepentingan antar kelompok sosial menjadi motor penggerak perubahan."
+            },
+            {
+                q: "11. Pemerintah kota menyediakan fasilitas transportasi massal modern yang nyaman dan bersih, namun banyak penumpang masih mencoret-coret kursi dan membuang sampah sembarangan. Kondisi ini menunjukkan gejala...",
+                opts: ["Culture Shock (gegar budaya)", "Culture Lag (ketertinggalan budaya)", "Asimilasi budaya", "Integrasi sosial sempurna"],
+                ans: 1,
+                exp: "Culture lag terjadi ketika budaya materiil (fasilitas modern) berkembang lebih cepat daripada budaya non-materiil (kesadaran & kedisiplinan)."
+            },
+            {
+                q: "12. Seorang pelajar yang berasal dari pedesaan yang tenang mengalami kebingungan dan stres saat pertama kali pindah ke kota metropolitan yang serba cepat dan individualistis. Gejala ini dinamakan...",
+                opts: ["Culture Shock", "Culture Lag", "Vested Interest", "Revolusi Sosial"],
+                ans: 0,
+                exp: "Culture shock adalah guncangan psikologis/sosial akibat berhadapan langsung dengan nilai dan lingkungan budaya baru yang berbeda drastis."
+            },
+            {
+                q: "13. Masuknya budaya populer Korea (Hallyu) di Indonesia melahirkan komunitas penggemar K-Pop, tren kuliner Korea halal, hingga gaya berpakaian kasual. Proses penyebaran unsur budaya ini disebut...",
+                opts: ["Revolusi", "Difusi", "Regres", "Disorganisasi"],
+                ans: 1,
+                exp: "Difusi adalah proses penyebaran unsur-unsur kebudayaan dari satu masyarakat ke masyarakat lain."
+            },
+            {
+                q: "14. Transaksi jual beli melalui marketplace dan pembayaran non-tunai (e-wallet) memberikan dampak positif bagi masyarakat modern, yaitu...",
+                opts: ["Meningkatkan perilaku konsumtif tanpa batas", "Meningkatkan efisiensi waktu dan memperluas jangkauan pasar UMKM", "Menghilangkan seluruh interaksi sosial manusia", "Menghambat pertumbuhan ekonomi kreatif"],
+                ans: 1,
+                exp: "Digitalisasi ekonomi mempermudah transaksi secara cepat dan membuka peluang pasar luas bagi pelaku UMKM."
+            },
+            {
+                q: "15. (HOTS) Di era arus informasi digital yang sangat deras, remaja mudah terpapar gaya hidup hedonis dan berita bohong (hoaks). Sikap paling bijak yang mencerminkan literasi sosiologis dalam menghadapi perubahan tersebut adalah...",
+                opts: ["Menolak seluruh penggunaan smartphone dan internet", "Mengikuti semua tren viral agar tidak dianggap ketinggalan zaman", "Bersikap selektif dengan menyaring budaya baru sesuai nilai Pancasila dan norma sosial", "Membatasi pergaulan hanya dengan kelompok yang sama saja"],
+                ans: 2,
+                exp: "Perubahan sosial tidak dapat dihindari; sikap terbaik adalah terbuka terhadap kemajuan namun tetap kritis dan selektif berlandaskan nilai serta norma."
+            }
+        ];
+
+        let quizState = {
+            currentIdx: 0,
+            userAnswers: new Array(quizQuestions.length).fill(null),
+            finished: false
+        };
+
+        function renderKuis() {
+            const container = document.getElementById('kuis-container');
+
+            if (quizState.finished) {
+                const correctCount = quizState.userAnswers.reduce((acc, ans, i) => acc + (ans === quizQuestions[i].ans ? 1 : 0), 0);
+                const score = Math.round((correctCount / quizQuestions.length) * 100);
+                appState.quizScore = score;
+                updateProgress();
+
+                let predikat = "Perlu Bimbingan";
+                let badgeColor = "bg-rose-100 text-rose-800";
+                let motivasi = "Jangan menyerah! Pelajari kembali modul materi A sampai H, lalu ulangi kuis ini untuk meraih hasil terbaik.";
+
+                if (score >= 90) {
+                    predikat = "Sangat Baik (Istimewa)";
+                    badgeColor = "bg-emerald-100 text-emerald-800";
+                    motivasi = "Luar biasa! Pemahaman sosiologismu tentang perubahan sosial sangat mendalam dan kritis. Pertahankan!";
+                } else if (score >= 75) {
+                    predikat = "Baik (Tuntas KKM)";
+                    badgeColor = "bg-blue-100 text-blue-800";
+                    motivasi = "Selamat! Kamu telah melampaui batas ketuntasan belajar. Terus asah kemampuan analisismu!";
+                } else if (score >= 60) {
+                    predikat = "Cukup (Mendekati Tuntas)";
+                    badgeColor = "bg-amber-100 text-amber-800";
+                    motivasi = "Sedikit lagi menuju tuntas! Cermati pembahasan soal-soal yang keliru dan coba ulangi kuis.";
+                }
+
+                container.innerHTML = `
+                    <div class="text-center py-6 space-y-5 fade-in">
+                        <div class="w-20 h-20 rounded-3xl gradient-hero text-white mx-auto flex items-center justify-center text-4xl shadow-xl">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full text-xs font-extrabold uppercase ${badgeColor}">${predikat}</span>
+                            <h3 class="font-display text-4xl sm:text-5xl font-extrabold text-slate-800 mt-3">${score} <span class="text-lg font-semibold text-slate-400">/ 100</span></h3>
+                            <p class="text-sm text-slate-500 mt-1">Menjawab benar ${correctCount} dari ${quizQuestions.length} soal</p>
+                        </div>
+                        <div class="max-w-xl mx-auto p-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-700">
+                            ${motivasi}
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-3 pt-2">
+                            <button onclick="resetQuiz()" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-sm transition flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                            </button>
+                            <button onclick="navigateTo('hasil')" class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-sm transition flex items-center gap-2">
+                                Lihat Rekap Hasil Belajar <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = quizQuestions[quizState.currentIdx];
+            const selectedAns = quizState.userAnswers[quizState.currentIdx];
+            const hasAnswered = selectedAns !== null;
+            const letters = ['A', 'B', 'C', 'D'];
+
+            container.innerHTML = `
+                <div class="space-y-5 fade-in">
+                    <!-- Navigasi Nomor Soal -->
+                    <div class="flex flex-wrap gap-1.5 pb-3 border-b border-slate-100">
+                        ${quizQuestions.map((_, i) => {
+                            const ans = quizState.userAnswers[i];
+                            let cls = "bg-slate-100 text-slate-600";
+                            if (i === quizState.currentIdx) cls = "ring-2 ring-indigo-600 bg-indigo-600 text-white";
+                            else if (ans !== null) cls = ans === quizQuestions[i].ans ? "bg-emerald-500 text-white" : "bg-rose-500 text-white";
+                            return `<button onclick="jumpQuiz(${i})" class="w-8 h-8 rounded-lg text-xs font-bold transition ${cls}">${i + 1}</button>`;
+                        }).join('')}
+                    </div>
+
+                    <div class="bg-slate-50 p-5 sm:p-6 rounded-2xl border border-slate-200">
+                        <span class="text-xs font-extrabold uppercase text-indigo-600">Pertanyaan ${quizState.currentIdx + 1} dari ${quizQuestions.length}</span>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800 mt-1 leading-relaxed">${q.q}</h3>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${q.opts.map((opt, i) => {
+                            let btnClass = "bg-white border-2 border-slate-200 hover:border-indigo-400 text-slate-700";
+                            let badgeClass = "bg-slate-100 text-slate-700";
+                            let iconHtml = "";
+
+                            if (hasAnswered) {
+                                if (i === q.ans) {
+                                    btnClass = "bg-emerald-50 border-2 border-emerald-500 text-emerald-900";
+                                    badgeClass = "bg-emerald-500 text-white";
+                                    iconHtml = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg ml-auto"></i>`;
+                                } else if (i === selectedAns) {
+                                    btnClass = "bg-rose-50 border-2 border-rose-500 text-rose-900";
+                                    badgeClass = "bg-rose-500 text-white";
+                                    iconHtml = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg ml-auto"></i>`;
+                                } else {
+                                    btnClass = "bg-white border-2 border-slate-100 text-slate-400 opacity-70";
+                                }
+                            }
+
+                            return `
+                                <button onclick="selectQuizOption(${i})" ${hasAnswered ? 'disabled' : ''} class="w-full p-4 rounded-2xl transition text-left flex items-center gap-3.5 font-medium text-sm sm:text-base ${btnClass}">
+                                    <span class="w-8 h-8 rounded-xl flex items-center justify-center font-extrabold text-xs shrink-0 ${badgeClass}">${letters[i]}</span>
+                                    <span>${opt}</span>
+                                    ${iconHtml}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    ${hasAnswered ? `
+                        <div class="p-4 rounded-2xl fade-in ${selectedAns === q.ans ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-rose-50 border border-rose-200 text-rose-900'}">
+                            <p class="font-extrabold text-sm">${selectedAns === q.ans ? '✓ Jawaban Benar!' : '✗ Jawaban Salah!'}</p>
+                            <p class="text-xs sm:text-sm mt-1 leading-relaxed"><strong>Pembahasan:</strong> ${q.exp}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <button onclick="jumpQuiz(${quizState.currentIdx - 1})" ${quizState.currentIdx === 0 ? 'disabled' : ''} class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold disabled:opacity-40">
+                            ← Sebelumnya
+                        </button>
+                        ${quizState.currentIdx + 1 < quizQuestions.length ? `
+                            <button onclick="jumpQuiz(${quizState.currentIdx + 1})" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold">
+                                Soal Berikutnya →
+                            </button>
+                        ` : `
+                            <button onclick="finishQuiz()" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold shadow-sm">
+                                Selesai & Lihat Nilai
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectQuizOption(optIdx) {
+            if (quizState.userAnswers[quizState.currentIdx] !== null) return;
+            quizState.userAnswers[quizState.currentIdx] = optIdx;
+            renderKuis();
+        }
+
+        function jumpQuiz(idx) {
+            if (idx >= 0 && idx < quizQuestions.length) {
+                quizState.currentIdx = idx;
+                renderKuis();
+            }
+        }
+
+        function finishQuiz() {
+            const unanswered = quizState.userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                showToast(`Masih ada ${unanswered} soal yang belum dijawab!`, 'error');
+                return;
+            }
+            quizState.finished = true;
+            renderKuis();
+        }
+
+        function resetQuiz() {
+            quizState = {
+                currentIdx: 0,
+                userAnswers: new Array(quizQuestions.length).fill(null),
+                finished: false
+            };
+            appState.quizScore = null;
+            renderKuis();
+            updateProgress();
+        }
+
+        function retryQuizFromResult() {
+            resetQuiz();
+            navigateTo('kuis');
+        }
+
+        // ==================== 6. STUDI KASUS (4 KASUS) ====================
+        const studiKasusData = [
+            {
+                id: 1,
+                shortTitle: "Kasus 1: Media Sosial",
+                title: "Perkembangan Media Sosial Mengubah Cara Remaja Berkomunikasi",
+                story: "Saat ini mayoritas remaja SMA lebih sering berinteraksi melalui pesan singkat, unggahan cerita (story), dan komentar di media sosial dibandingkan berbincang langsung saat berkumpul. Bahasa gaul digital pun berkembang pesat di kalangan pelajar.",
+                reference: {
+                    bentuk: "Perubahan kecil pada gaya bahasa/interaksi serta perubahan sosial tidak direncanakan akibat revolusi teknologi komunikasi.",
+                    faktor: "Faktor internal berupa penemuan baru (invention) di bidang teknologi informasi dan internet.",
+                    terdampak: "Kalangan remaja/pelajar, orang tua, serta lingkungan pergaulan sekolah.",
+                    dampak: "Positif: Memudahkan komunikasi jarak jauh, memperluas jejaring pertemanan, dan akses informasi cepat. Negatif: Fenomena phubbing (sibuk dengan ponsel saat berkumpul), berkurangnya empati tatap muka, dan risiko cyberbullying.",
+                    sikap: "Menggunakan media sosial secara bijak, membatasi waktu layar (screen time) saat berkumpul bersama keluarga/teman, dan menjaga etika berkomunikasi digital."
+                }
+            },
+            {
+                id: 2,
+                shortTitle: "Kasus 2: Belanja Online",
+                title: "Masyarakat Beralih dari Pasar Tradisional ke Belanja Online",
+                story: "Kemudahan berbelanja lewat aplikasi e-commerce dengan promo gratis ongkir dan pembayaran digital membuat banyak warga memilih berbelanja dari rumah. Akibatnya, sebagian pedagang di pasar tradisional mengalami penurunan pembeli.",
+                reference: {
+                    bentuk: "Perubahan besar dalam lembaga ekonomi dan pola perilaku konsumsi masyarakat.",
+                    faktor: "Inovasi teknologi digital (e-commerce & fintech) serta efisiensi kebutuhan masyarakat modern.",
+                    terdampak: "Pedagang pasar tradisional, konsumen, pelaku UMKM digital, dan jasa kurir logistik.",
+                    dampak: "Positif: Transaksi praktis, harga kompetitif, dan tumbuhnya lapangan kerja kurir/UMKM daring. Negatif: Menurunnya omzet pedagang tradisional yang belum melek digital serta meningkatnya perilaku konsumtif.",
+                    sikap: "Belanja sesuai kebutuhan (tidak impulsif) serta mendukung digitalisasi UMKM dan pedagang pasar tradisional agar mampu beradaptasi."
+                }
+            },
+            {
+                id: 3,
+                shortTitle: "Kasus 3: Transportasi Online",
+                title: "Kehadiran Transportasi Online Mengubah Kebiasaan Bepergian",
+                story: "Masyarakat perkotaan kini terbiasa memesan ojek atau taksi melalui aplikasi ponsel tanpa harus berjalan ke pangkalan. Layanan ini juga dimanfaatkan untuk memesan makanan dan mengirim barang secara instan.",
+                reference: {
+                    bentuk: "Perubahan cepat dan progresif di bidang layanan transportasi serta struktur pekerjaan sektor jasa.",
+                    faktor: "Penemuan baru aplikasi berbasis GPS (sharing economy) dan tingginya kebutuhan mobilitas masyarakat.",
+                    terdampak: "Pengemudi ojek pangkalan/angkot, mitra pengemudi online, penumpang, dan pelaku usaha kuliner.",
+                    dampak: "Positif: Mobilitas cepat, tarif transparan, dan membuka peluang penghasilan fleksibel. Negatif: Sempat memicu gesekan/konflik sosial dengan transportasi konvensional dan ketergantungan pada layanan instan.",
+                    sikap: "Mendorong akomodasi dan regulasi yang adil bagi transportasi online maupun konvensional, serta mengutamakan keselamatan berkendara."
+                }
+            },
+            {
+                id: 4,
+                shortTitle: "Kasus 4: Budaya Korea",
+                title: "Masuknya Budaya Korea Memengaruhi Gaya Berpakaian, Musik, dan Hiburan Remaja",
+                story: "Gelombang budaya Korea (Korean Wave/Hallyu) melalui drama, musik K-Pop, dan produk kecantikan sangat digemari remaja Indonesia. Banyak remaja meniru gaya berpakaian hingga mempelajari bahasa Korea.",
+                reference: {
+                    bentuk: "Perubahan kecil pada unsur budaya (mode dan hiburan) melalui proses difusi budaya global.",
+                    faktor: "Faktor eksternal berupa pengaruh kebudayaan masyarakat lain yang disebarkan lewat media global.",
+                    terdampak: "Remaja/generasi muda, industri kreatif lokal, dan pelaku usaha mode/kuliner.",
+                    dampak: "Positif: Menambah wawasan lintas budaya, memotivasi belajar bahasa asing, dan menginspirasi kreativitas industri musik lokal. Negatif: Potensi lunturnya kecintaan terhadap budaya lokal dan sikap konsumtif membeli pernak-pernik impor.",
+                    sikap: "Bersikap terbuka terhadap budaya asing sebagai wawasan global, namun tetap mencintai dan melestarikan budaya Nusantara sebagai jati diri bangsa."
+                }
+            }
+        ];
+
+        let currentKasusIdx = 0;
+
+        function renderStudiKasus() {
+            const tabs = document.getElementById('kasus-tabs');
+            tabs.innerHTML = studiKasusData.map((k, idx) => {
+                const active = idx === currentKasusIdx;
+                const done = appState.kasusCompleted[idx];
+                return `
+                    <button onclick="selectKasus(${idx})" class="p-3.5 rounded-2xl border-2 text-left transition ${active ? 'border-purple-600 bg-purple-50' : 'border-slate-200 bg-white hover:border-purple-300'}">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold ${active ? 'text-purple-700' : 'text-slate-500'}">${k.shortTitle}</span>
+                            ${done ? '<i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>' : ''}
+                        </div>
+                        <p class="text-xs font-semibold text-slate-800 mt-1 line-clamp-2">${k.title}</p>
+                    </button>
+                `;
+            }).join('');
+
+            const k = studiKasusData[currentKasusIdx];
+            const ws = document.getElementById('kasus-workspace');
+            ws.innerHTML = `
+                <div class="space-y-5 fade-in">
+                    <div class="bg-white p-5 rounded-2xl border-l-4 border-purple-600 shadow-xs">
+                        <span class="text-xs font-extrabold uppercase text-purple-600">Fenomena ${k.id}</span>
+                        <h3 class="font-display text-lg sm:text-xl font-extrabold text-slate-800 mt-0.5">${k.title}</h3>
+                        <p class="text-sm text-slate-700 mt-2 leading-relaxed">${k.story}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">1. Apa bentuk perubahan sosial yang terjadi?</label>
+                            <textarea id="ks-q1" rows="2" placeholder="Tuliskan analisis bentuk perubahannya..." class="w-full p-3 rounded-xl border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">2. Apa faktor penyebabnya?</label>
+                            <textarea id="ks-q2" rows="2" placeholder="Internal / eksternal? Jelaskan..." class="w-full p-3 rounded-xl border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">3. Siapa saja yang terdampak?</label>
+                            <textarea id="ks-q3" rows="2" placeholder="Kelompok masyarakat yang merasakan perubahan..." class="w-full p-3 rounded-xl border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">4. Apa dampak positif dan negatifnya?</label>
+                            <textarea id="ks-q4" rows="2" placeholder="Sebutkan dampak positif & negatif..." class="w-full p-3 rounded-xl border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">5. Bagaimana sikap bijak masyarakat dalam menghadapi perubahan tersebut?</label>
+                            <textarea id="ks-q5" rows="2" placeholder="Tuliskan solusi atau sikap kritis yang disarankan..." class="w-full p-3 rounded-xl border border-slate-300 text-sm bg-white outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap justify-between items-center gap-3">
+                        <button onclick="submitKasusAnalysis()" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm shadow-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-check-double"></i> Simpan & Lihat Kunci Analisis Referensi
+                        </button>
+                    </div>
+
+                    <div id="kasus-reference-box" class="hidden p-5 rounded-2xl bg-indigo-50 border border-indigo-200 space-y-2.5 fade-in">
+                        <h4 class="font-bold text-indigo-900 flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-orange-500"></i> Kunci Analisis Sosiologis (Referensi Pembanding):
+                        </h4>
+                        <ul class="text-xs sm:text-sm text-slate-700 space-y-1.5 leading-relaxed">
+                            <li><strong>1. Bentuk Perubahan:</strong> ${k.reference.bentuk}</li>
+                            <li><strong>2. Faktor Penyebab:</strong> ${k.reference.faktor}</li>
+                            <li><strong>3. Pihak Terdampak:</strong> ${k.reference.terdampak}</li>
+                            <li><strong>4. Dampak Positif & Negatif:</strong> ${k.reference.dampak}</li>
+                            <li><strong>5. Sikap Bijak Masyarakat:</strong> ${k.reference.sikap}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectKasus(idx) {
+            currentKasusIdx = idx;
+            renderStudiKasus();
+        }
+
+        function submitKasusAnalysis() {
+            const q1 = document.getElementById('ks-q1').value.trim();
+            const q2 = document.getElementById('ks-q2').value.trim();
+            if (!q1 || !q2) {
+                showToast('Isi minimal pertanyaan 1 dan 2 sebelum melihat kunci analisis!', 'error');
+                return;
+            }
+            appState.kasusCompleted[currentKasusIdx] = true;
+            document.getElementById('kasus-reference-box').classList.remove('hidden');
+            showToast('Analisis kasus berhasil disimpan!', 'success');
+            renderStudiKasusTabsOnly();
+            updateProgress();
+        }
+
+        function renderStudiKasusTabsOnly() {
+            const tabs = document.getElementById('kasus-tabs');
+            tabs.innerHTML = studiKasusData.map((k, idx) => {
+                const active = idx === currentKasusIdx;
+                const done = appState.kasusCompleted[idx];
+                return `
+                    <button onclick="selectKasus(${idx})" class="p-3.5 rounded-2xl border-2 text-left transition ${active ? 'border-purple-600 bg-purple-50' : 'border-slate-200 bg-white hover:border-purple-300'}">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold ${active ? 'text-purple-700' : 'text-slate-500'}">${k.shortTitle}</span>
+                            ${done ? '<i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>' : ''}
+                        </div>
+                        <p class="text-xs font-semibold text-slate-800 mt-1 line-clamp-2">${k.title}</p>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // ==================== 7. REFLEKSI PEMBELAJARAN ====================
+        function saveRefleksi(e) {
+            e.preventDefault();
+            const r1 = document.getElementById('ref-1').value.trim();
+            const r2 = document.getElementById('ref-2').value.trim();
+            const r3 = document.getElementById('ref-3').value.trim();
+            const r4 = document.getElementById('ref-4').value.trim();
+
+            appState.refleksiSaved = true;
+            const summary = document.getElementById('refleksi-summary');
+            const output = document.getElementById('refleksi-output');
+            summary.classList.remove('hidden');
+            output.innerHTML = `
+                <p><strong>Pengetahuan Baru:</strong> ${r1}</p>
+                <p><strong>Perubahan Terdekat:</strong> ${r2}</p>
+                <p><strong>Dampak Dirasakan:</strong> ${r3}</p>
+                <p><strong>Sikap Bijak Saya:</strong> ${r4}</p>
+            `;
+            showToast('Refleksi pembelajaran berhasil disimpan!', 'success');
+            updateProgress();
+        }
+
+        // ==================== 8. HASIL BELAJAR ====================
+        function updateHasilBelajar() {
+            const qScore = appState.quizScore !== null ? appState.quizScore : 0;
+            const gAvg = Math.round((appState.game1Score + appState.game2Score + appState.game3Score) / 3);
+            const pct = updateProgress();
+
+            document.getElementById('res-kuis-score').textContent = appState.quizScore !== null ? qScore : 'Belum';
+            document.getElementById('res-game-avg').textContent = gAvg;
+            document.getElementById('res-game-detail').textContent = `G1: ${appState.game1Score} | G2: ${appState.game2Score} | G3: ${appState.game3Score}`;
+            document.getElementById('res-progress').textContent = `${pct}%`;
+
+            const statusEl = document.getElementById('res-status');
+            const motivEl = document.getElementById('res-motivation');
+
+            if (appState.quizScore === null) {
+                statusEl.textContent = "Belum Ujian Kuis";
+                statusEl.className = "text-xl font-extrabold text-amber-700 mt-2";
+                motivEl.textContent = "Kamu belum menyelesaikan Kuis Interaktif (15 Soal). Kerjakan kuis untuk melihat status ketuntasanmu!";
+            } else if (qScore >= 75) {
+                statusEl.textContent = "TUNTAS (LULUS)";
+                statusEl.className = "text-xl font-extrabold text-emerald-700 mt-2";
+                motivEl.textContent = "Selamat! Kamu telah menguasai materi Perubahan Sosial dengan sangat baik. Teruslah menjadi generasi muda yang adaptif dan berpikir kritis!";
+            } else {
+                statusEl.textContent = "PERLU PENGUATAN";
+                statusEl.className = "text-xl font-extrabold text-rose-700 mt-2";
+                motivEl.textContent = "Skor kuis masih di bawah 75. Ayo baca kembali bagian materi yang belum dipahami dan tekan tombol 'Ulangi Kuis'!";
+            }
+        }
+
+        function resetAllProgress() {
+            appState.tujuanChecked = [false, false, false, false, false, false];
+            appState.currentMateriIdx = 0;
+            appState.materiRead = [true, false, false, false, false, false, false, false];
+            appState.mediaViewed = [false, false, false, false, false];
+            appState.game1Score = 0;
+            appState.game2Score = 0;
+            appState.game3Score = 0;
+            appState.quizScore = null;
+            appState.kasusCompleted = [false, false, false, false];
+            appState.refleksiSaved = false;
+
+            document.getElementById('badge-score-g1').textContent = 'Skor: 0';
+            document.getElementById('badge-score-g2').textContent = 'Skor: 0';
+            document.getElementById('badge-score-g3').textContent = 'Skor: 0';
+            document.getElementById('refleksi-form').reset();
+            document.getElementById('refleksi-summary').classList.add('hidden');
+
+            resetGame1();
+            resetGame2();
+            resetGame3();
+            resetQuiz();
+            renderTujuan();
+            renderMateri();
+            renderMediaInteraktif();
+            renderStudiKasus();
+            updateHasilBelajar();
+            showToast('Seluruh progress belajar telah direset.', 'info');
+        }
+
+        // ==================== INISIALISASI SAAT HALAMAN DIMUAT ====================
+        window.onload = function() {
+            renderTujuan();
+            renderMateri();
+            renderMediaInteraktif();
+            switchGame(1);
+            renderKuis();
+            renderStudiKasus();
+            updateProgress();
+        };
+    </script>
+</body>
+</html>
